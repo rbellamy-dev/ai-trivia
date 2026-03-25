@@ -1,2 +1,3 @@
 # trivia-game-01
-Created with CodeSandbox
+sample quiz game made in react and typescript.
+
