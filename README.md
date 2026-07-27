@@ -32,16 +32,6 @@ Without `OPENAI_API_KEY`, category selection surfaces a friendly error and a "Tr
 
 Fully keyboard-operable (Tab between answers, Enter to select), respects `prefers-reduced-motion`, and targets WCAG 2.1 AA contrast.
 
-## Design system
-
-The visual language ("Constellation" / North Star: *The Observatory*) is documented and tokenized:
-
-- `PRODUCT.md` — register, audience, brand personality, anti-references, design principles
-- `DESIGN.md` — colors, typography, elevation, components, do's and don'ts (Stitch DESIGN.md format)
-- `.impeccable/design.json` — machine-readable sidecar (tonal ramps, motion, component snippets)
-- Design tokens live in `src/app/globals.css` as a Tailwind v4 `@theme` block; components reference tokens, not raw hex.
-- `design/` — the standalone HTML theme explorations, including `variation-4-constellation.html`, the source of this theme.
-
 ## Structure
 
 - `src/app/` — App Router entry (`layout.tsx`, `page.tsx`, `globals.css`)
