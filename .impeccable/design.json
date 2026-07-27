@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-26T00:00:00.000Z",
+  "title": "Design System: Constellation Trivia",
+  "extensions": {
+    "colorMeta": {
+      "night": { "role": "neutral", "displayName": "Void", "canonical": "#050810", "tonalRamp": ["#050810", "#0a1020", "#141c30", "#243350", "#3a4a70", "#5a6a94", "#8a97ba", "#c3cce0"] },
+      "starlight": { "role": "neutral", "displayName": "Starlight", "canonical": "#e8eeff", "tonalRamp": ["#1a2033", "#2a3350", "#3f4a70", "#5a6790", "#7d8bb4", "#a4b0d4", "#c8d1ec", "#e8eeff"] },
+      "fog": { "role": "neutral", "displayName": "Fog", "canonical": "#7c86a6", "tonalRamp": ["#181c26", "#282e40", "#3b4258", "#4f5876", "#7c86a6", "#8b95b4", "#adb5cd", "#d0d5e4"] },
+      "teal": { "role": "primary", "displayName": "Aurora Teal", "canonical": "#6ee7d8", "tonalRamp": ["#0d3a34", "#12564d", "#187368", "#2a9a8a", "#42c2af", "#6ee7d8", "#9df0e6", "#c8f7f1"] },
+      "stargold": { "role": "secondary", "displayName": "Earned Gold", "canonical": "#ffd98e", "tonalRamp": ["#4a3410", "#6b4c18", "#8f6a24", "#b88f3a", "#e0b866", "#ffd98e", "#ffe6b0", "#fff2d6"] },
+      "violet": { "role": "secondary", "displayName": "Nebula Violet", "canonical": "#a78bfa", "tonalRamp": ["#2a1f5e", "#3a2b7a", "#4d3a9a", "#6a52c0", "#8770e0", "#a78bfa", "#c3b2fc", "#ded4fe"] },
+      "correct": { "role": "tertiary", "displayName": "Signal Green", "canonical": "#7be8a2", "tonalRamp": ["#0f3a20", "#155630", "#1d7342", "#2f9e5c", "#4fc27e", "#7be8a2", "#a4f0c0", "#c8f7d8"] },
+      "wrong": { "role": "tertiary", "displayName": "Signal Coral", "canonical": "#ff7b8a", "tonalRamp": ["#4a1520", "#6b1e2e", "#8f2a3e", "#b83c52", "#e05a6e", "#ff7b8a", "#ffa4ae", "#ffc8ce"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "The Constellation wordmark and finale titles; extreme 0.55em tracking." },
+      "headline": { "displayName": "Headline", "purpose": "Category-select prompt and finale tier name." },
+      "question": { "displayName": "Question", "purpose": "The live trivia question; light, large Outfit with faint teal glow." },
+      "body": { "displayName": "Body", "purpose": "Supporting copy and answer text; airy weight 350." },
+      "label": { "displayName": "Label", "purpose": "Meta rows, tile captions, verdicts; wide-tracked uppercase Unbounded." }
+    },
+    "shadows": [
+      { "name": "tile-hover-glow", "value": "0 0 40px -8px var(--color-teal)", "purpose": "Teal glow on hover/focus of category tiles." },
+      { "name": "answer-hover-glow", "value": "0 0 26px -6px var(--color-teal)", "purpose": "Teal glow on hover of answer rows." },
+      { "name": "star-glow", "value": "drop-shadow(0 0 6px var(--color-stargold))", "purpose": "Halo on lit constellation nodes and the teal current-question pulse." },
+      { "name": "score-glow", "value": "0 0 40px rgb(110 231 216 / 0.35)", "purpose": "Text glow on the big finale score numeral only." }
+    ],
+    "motion": [
+      { "name": "ease-star", "value": "cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "Standard ease-out for every state transition and keyframe." },
+      { "name": "fade-in", "value": "fade-in 0.6s ease-star both", "purpose": "Phase entrances." },
+      { "name": "drift-in", "value": "drift-in 0.6s ease-star both", "purpose": "Staggered tile and answer-row entrances (translateY 16px + fade)." },
+      { "name": "slide-up", "value": "slide-up 0.35s ease-star", "purpose": "Verdict line arrival." },
+      { "name": "pop", "value": "pop 0.3s ease-star", "purpose": "Score number and selected radio dot (scale 1.3 to 1)." },
+      { "name": "aurora-move", "value": "aurora-move 18s ease-star infinite alternate", "purpose": "Slow drift of the backdrop aurora blobs." },
+      { "name": "twinkle", "value": "twinkle 3s ease-in-out infinite alternate", "purpose": "Per-star opacity flicker in the starfield." },
+      { "name": "shoot", "value": "shoot 9s linear infinite", "purpose": "Periodic shooting star across the sky." },
+      { "name": "orbit-spin", "value": "orbit-spin 3s linear infinite", "purpose": "Loader satellite orbiting the gold core." },
+      { "name": "star-pulse", "value": "star-pulse 1.4s ease-star infinite", "purpose": "The current-question node pulsing teal." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "460px" },
+      { "name": "md", "value": "500px" },
+      { "name": "lg", "value": "720px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Glass pill for the main action (Next star, Chart again, Try Again).",
+      "html": "<button class=\"ds-btn-primary\">Next star</button>",
+      "css": ".ds-btn-primary { font-family: Unbounded, sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--color-teal); background: color-mix(in oklab, var(--color-teal) 5%, transparent); border: 1px solid color-mix(in oklab, var(--color-teal) 50%, transparent); border-radius: 9999px; padding: 16px 36px; cursor: pointer; transition: background 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s cubic-bezier(0.4,0,0.2,1); } .ds-btn-primary:hover { background: color-mix(in oklab, var(--color-teal) 15%, transparent); box-shadow: 0 0 30px -4px var(--color-teal); } .ds-btn-primary:focus-visible { outline: 2px solid var(--color-teal); outline-offset: 2px; }"
+    },
+    {
+      "name": "Quiet Button",
+      "kind": "button",
+      "refersTo": "button-quiet",
+      "description": "Secondary ghost action.",
+      "html": "<button class=\"ds-btn-quiet\">Change subject</button>",
+      "css": ".ds-btn-quiet { font-family: Unbounded, sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--color-fog); background: transparent; border: 1px solid color-mix(in oklab, var(--color-fog) 40%, transparent); border-radius: 9999px; padding: 16px 36px; cursor: pointer; transition: color 0.3s, border-color 0.3s; } .ds-btn-quiet:hover { color: var(--color-starlight); border-color: var(--color-fog); }"
+    },
+    {
+      "name": "Category Tile",
+      "kind": "card",
+      "refersTo": "category-tile",
+      "description": "Glass tile in the category grid with a teal line icon.",
+      "html": "<button class=\"ds-tile\"><span class=\"ds-tile-disc\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M3 12h18M12 3c2.7 2.6 4 5.7 4 9s-1.3 6.4-4 9c-2.7-2.6-4-5.7-4-9s1.3-6.4 4-9Z\"/></svg></span><span class=\"ds-tile-name\">Geography</span><span class=\"ds-tile-sub\">10 stars</span></button>",
+      "css": ".ds-tile { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 24px 16px; border-radius: 12px; background: color-mix(in oklab, var(--color-starlight) 3%, transparent); border: 1px solid color-mix(in oklab, var(--color-starlight) 12%, transparent); backdrop-filter: blur(4px); cursor: pointer; transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), border-color 0.3s, background 0.3s, box-shadow 0.3s; } .ds-tile:hover { transform: translateY(-3px); border-color: color-mix(in oklab, var(--color-teal) 60%, transparent); background: color-mix(in oklab, var(--color-teal) 5%, transparent); box-shadow: 0 0 40px -8px var(--color-teal); } .ds-tile-disc { display: grid; place-content: center; width: 46px; height: 46px; color: var(--color-teal); } .ds-tile-name { font-family: Unbounded, sans-serif; font-weight: 300; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-starlight); } .ds-tile-sub { font-size: 9.5px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--color-fog); }"
+    },
+    {
+      "name": "Answer Row",
+      "kind": "input",
+      "refersTo": "answer-row",
+      "description": "Glass label row with a restyled radio key-dot; correct/wrong/dim locked states.",
+      "html": "<label class=\"ds-answer\"><span class=\"ds-answer-dot\"></span><span>The Nile</span></label>",
+      "css": ".ds-answer { display: flex; align-items: center; gap: 14px; padding: 14px 22px; border-radius: 12px; font-family: Outfit, sans-serif; font-weight: 300; font-size: 15px; color: var(--color-starlight); background: color-mix(in oklab, var(--color-starlight) 3%, transparent); border: 1px solid color-mix(in oklab, var(--color-starlight) 15%, transparent); backdrop-filter: blur(4px); cursor: pointer; transition: border-color 0.2s, background 0.2s, box-shadow 0.2s; } .ds-answer:hover { border-color: color-mix(in oklab, var(--color-teal) 60%, transparent); box-shadow: 0 0 26px -6px var(--color-teal); } .ds-answer-dot { flex: none; width: 10px; height: 10px; border-radius: 9999px; background: color-mix(in oklab, var(--color-starlight) 25%, transparent); }"
+    },
+    {
+      "name": "Constellation Progress",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Signature progress meter: answered questions light stars, adjacent lit stars connect gold.",
+      "html": "<svg class=\"ds-constellation\" viewBox=\"0 0 800 64\" preserveAspectRatio=\"none\"><line x1=\"40\" y1=\"24\" x2=\"200\" y2=\"40\" class=\"ds-line-lit\"/><line x1=\"200\" y1=\"40\" x2=\"360\" y2=\"18\" class=\"ds-line\"/><circle cx=\"40\" cy=\"24\" r=\"4.5\" class=\"ds-node-gold\"/><circle cx=\"200\" cy=\"40\" r=\"3\" class=\"ds-node-fog\"/><circle cx=\"360\" cy=\"18\" r=\"4\" class=\"ds-node-now\"/><circle cx=\"520\" cy=\"46\" r=\"3\" class=\"ds-node-future\"/></svg>",
+      "css": ".ds-constellation { display: block; width: 100%; height: 64px; overflow: visible; } .ds-line { stroke: color-mix(in oklab, var(--color-starlight) 25%, transparent); stroke-width: 1; } .ds-line-lit { stroke: color-mix(in oklab, var(--color-stargold) 60%, transparent); stroke-width: 1; } .ds-node-gold { fill: var(--color-stargold); filter: drop-shadow(0 0 6px var(--color-stargold)); } .ds-node-fog { fill: var(--color-fog); } .ds-node-now { fill: var(--color-teal); filter: drop-shadow(0 0 6px var(--color-teal)); animation: ds-pulse 1.4s cubic-bezier(0.4,0,0.2,1) infinite; } .ds-node-future { fill: color-mix(in oklab, var(--color-starlight) 20%, transparent); } @keyframes ds-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Observatory",
+    "overview": "This is the quiet hour at an observatory: lights down, the dome open, a deep field of stars overhead, and a single instrument glowing softly in front of you. The interface is atmosphere first and controls second. A near-black canvas holds a drifting aurora and a scatter of twinkling stars; the UI sits on top of it in restrained translucent glass, never a solid slab, never a bright card. The signature idea is that your score is not a readout but a drawing: each answered question lights a star in a constellation that assembles itself across the top of the play area, gold for a hit, faded for a miss.",
+    "keyCharacteristics": [
+      "Near-black cosmic canvas with a live aurora + starfield backdrop.",
+      "Frameless, translucent-glass surfaces; no opaque cards.",
+      "One working accent (teal); gold is earned, never decorative.",
+      "Progress rendered as a self-drawing constellation.",
+      "Unbounded display with extreme letter-spacing; airy light-weight Outfit body.",
+      "Motion is meaningful and eased-out; every animation names an event."
+    ],
+    "rules": [
+      { "name": "The One Voice Rule", "body": "Teal is the only interactive color. If a control lights up, hovers, focuses, or pulses, it is teal, never gold, violet, or green.", "section": "colors" },
+      { "name": "The Earned Gold Rule", "body": "Gold appears only as a consequence of a correct answer or a finished score. It is forbidden as decoration, as a border, or as a hover state.", "section": "colors" },
+      { "name": "The Wide-Tracking Rule", "body": "Every uppercase Unbounded label carries at least 0.22em tracking; the wordmark carries 0.55em. Tight uppercase is forbidden.", "section": "typography" },
+      { "name": "The No-Shadow Rule", "body": "Surfaces cast no drop shadows. If something needs to feel active, it glows; if it needs separation, it uses translucency and blur.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do keep teal as the only interactive color and gold as reward-only.",
+      "Do render foreground surfaces as translucent glass over the live sky.",
+      "Do convey depth with glow and translucency, never drop shadows.",
+      "Do track uppercase Unbounded labels at 0.22em or wider.",
+      "Do map every animation to a real event and ease out; provide a prefers-reduced-motion settle.",
+      "Do keep progress available to screen readers via the constellation's live-text fallback."
+    ],
+    "donts": [
+      "Don't reintroduce opaque cards or the old white panel; no card grids, and never nest a glass surface inside another.",
+      "Don't drift toward generic quiz-app SaaS (Kahoot/Quizizz primary-color cartoon energy).",
+      "Don't turn it into a gamified neon casino (coin showers, slot glitz, streak-pressure loops).",
+      "Don't let it flatten into a corporate dashboard (Material/Bootstrap gray-on-white card grids).",
+      "Don't ship AI slop: no gradient text anywhere (wordmark and finale title are solid color), no decorative glassmorphism, no hero-metric template, no identical card grids.",
+      "Don't use #000 or #fff for surfaces or text.",
+      "Don't put a colored border-left stripe on any row or callout."
+    ]
+  }
+}
