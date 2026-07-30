@@ -59,7 +59,7 @@ const Trivia = () => {
     <>
       <NightSky />
       <main className="relative z-10 mx-auto flex min-h-full w-full max-w-[860px] flex-col items-center justify-center px-6 py-11 leading-normal">
-        <header className="mb-9 text-center animate-fade-in">
+        <header className="mb-9 text-center animate-rise">
           <h1 className="font-display text-xl font-light uppercase tracking-[0.55em] text-starlight [text-indent:0.55em] max-[520px]:text-base max-[520px]:tracking-[0.3em] max-[520px]:[text-indent:0.3em]">
             Almanac
           </h1>

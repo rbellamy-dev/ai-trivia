@@ -6,8 +6,10 @@ const CategorySelect = ({
 }: {
   onSelect: (category: string) => void;
 }) => {
+  // animate-rise, not fade-in: this section holds the LCP heading, so it must
+  // be contentful at frame zero (transform-only entrance).
   return (
-    <section className="flex flex-col text-center animate-fade-in">
+    <section className="flex flex-col text-center animate-rise">
       <h2 className="m-0 font-display text-[34px] font-medium leading-tight text-starlight max-[520px]:text-[26px]">
         Ten stars are waiting.
         <br />
