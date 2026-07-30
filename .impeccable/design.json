@@ -1,47 +1,48 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-26T00:00:00.000Z",
-  "title": "Design System: Constellation Trivia",
+  "generatedAt": "2026-07-28T00:00:00.000Z",
+  "title": "Design System: Almanac",
   "extensions": {
     "colorMeta": {
-      "night": { "role": "neutral", "displayName": "Void", "canonical": "#050810", "tonalRamp": ["#050810", "#0a1020", "#141c30", "#243350", "#3a4a70", "#5a6a94", "#8a97ba", "#c3cce0"] },
-      "starlight": { "role": "neutral", "displayName": "Starlight", "canonical": "#e8eeff", "tonalRamp": ["#1a2033", "#2a3350", "#3f4a70", "#5a6790", "#7d8bb4", "#a4b0d4", "#c8d1ec", "#e8eeff"] },
-      "fog": { "role": "neutral", "displayName": "Fog", "canonical": "#7c86a6", "tonalRamp": ["#181c26", "#282e40", "#3b4258", "#4f5876", "#7c86a6", "#8b95b4", "#adb5cd", "#d0d5e4"] },
-      "teal": { "role": "primary", "displayName": "Aurora Teal", "canonical": "#6ee7d8", "tonalRamp": ["#0d3a34", "#12564d", "#187368", "#2a9a8a", "#42c2af", "#6ee7d8", "#9df0e6", "#c8f7f1"] },
-      "stargold": { "role": "secondary", "displayName": "Earned Gold", "canonical": "#ffd98e", "tonalRamp": ["#4a3410", "#6b4c18", "#8f6a24", "#b88f3a", "#e0b866", "#ffd98e", "#ffe6b0", "#fff2d6"] },
-      "violet": { "role": "secondary", "displayName": "Nebula Violet", "canonical": "#a78bfa", "tonalRamp": ["#2a1f5e", "#3a2b7a", "#4d3a9a", "#6a52c0", "#8770e0", "#a78bfa", "#c3b2fc", "#ded4fe"] },
-      "correct": { "role": "tertiary", "displayName": "Signal Green", "canonical": "#7be8a2", "tonalRamp": ["#0f3a20", "#155630", "#1d7342", "#2f9e5c", "#4fc27e", "#7be8a2", "#a4f0c0", "#c8f7d8"] },
-      "wrong": { "role": "tertiary", "displayName": "Signal Coral", "canonical": "#ff7b8a", "tonalRamp": ["#4a1520", "#6b1e2e", "#8f2a3e", "#b83c52", "#e05a6e", "#ff7b8a", "#ffa4ae", "#ffc8ce"] }
+      "night": { "role": "neutral", "displayName": "Void", "canonical": "#050810", "tonalRamp": ["#02030a", "#050810", "#0a1020", "#111a30", "#1c2742", "#2e3a58", "#4a5670", "#6d7890"] },
+      "deep": { "role": "neutral", "displayName": "Deep Space", "canonical": "#0a1020", "tonalRamp": ["#04060f", "#070c1a", "#0a1020", "#101a33", "#1a2745", "#2a3a5c", "#455574", "#687894"] },
+      "starlight": { "role": "neutral", "displayName": "Starlight", "canonical": "#e8eeff", "tonalRamp": ["#1a1e2b", "#333a4d", "#4d5670", "#6b7590", "#8b94ad", "#adb6cb", "#cbd2e5", "#e8eeff"] },
+      "fog": { "role": "neutral", "displayName": "Fog", "canonical": "#aab3cd", "tonalRamp": ["#1b1e28", "#333846", "#4b5265", "#666e85", "#8189a3", "#9aa2bd", "#aab3cd", "#c6cde0"] },
+      "ember": { "role": "primary", "displayName": "Ember Peach", "canonical": "#ffb38a", "tonalRamp": ["#3a1d0e", "#5c2f16", "#82441f", "#a85c2d", "#cc7a45", "#e69566", "#ffb38a", "#ffd0b3"] },
+      "stargold": { "role": "secondary", "displayName": "Earned Gold", "canonical": "#ffd98e", "tonalRamp": ["#3d2f0e", "#5f4a16", "#856820", "#ab882c", "#cca63c", "#e6c25e", "#ffd98e", "#ffe9bb"] },
+      "violet": { "role": "secondary", "displayName": "Nebula Violet", "canonical": "#a78bfa", "tonalRamp": ["#1d1436", "#2f1f57", "#432c7a", "#5a3ba1", "#7355c4", "#8f70e0", "#a78bfa", "#c4b0fd"] },
+      "correct": { "role": "tertiary", "displayName": "Signal Green", "canonical": "#7be8a2", "tonalRamp": ["#0e2e1b", "#154a2b", "#1d693c", "#268a4f", "#38ab68", "#57c884", "#7be8a2", "#a9f3c3"] },
+      "wrong": { "role": "tertiary", "displayName": "Signal Rose", "canonical": "#ffa8cf", "tonalRamp": ["#3a0f26", "#5c193b", "#822553", "#a8346c", "#cc4d88", "#e670a8", "#ffa8cf", "#ffc9e2"] },
+      "aurora-1": { "role": "neutral", "displayName": "Aurora Red", "canonical": "#8c202a", "tonalRamp": ["#20060a", "#3a0c12", "#57131c", "#742026", "#8c202a", "#ab3a45", "#c85c66", "#e08a92"] },
+      "aurora-2": { "role": "neutral", "displayName": "Aurora Indigo", "canonical": "#2a1f5e", "tonalRamp": ["#0e0a1f", "#181233", "#221a4a", "#2a1f5e", "#3b2d7d", "#50419c", "#6a5aba", "#8a7cd4"] },
+      "aurora-3": { "role": "neutral", "displayName": "Aurora Wine", "canonical": "#6e1830", "tonalRamp": ["#1c0610", "#340b1c", "#4f1128", "#6e1830", "#8c2a46", "#a94660", "#c66b81", "#e099a9"] },
+      "star-silver": { "role": "neutral", "displayName": "Silver Star", "canonical": "#c8d4f5", "tonalRamp": ["#191c26", "#2f3444", "#464d63", "#606883", "#7d86a3", "#9ba4c0", "#c8d4f5", "#dee6fb"] },
+      "star-bronze": { "role": "neutral", "displayName": "Bronze Star", "canonical": "#d9a878", "tonalRamp": ["#2e1c0d", "#4b2f16", "#6b4520", "#8c5c2c", "#ad763c", "#c89056", "#d9a878", "#e8c6a2"] }
     },
     "typographyMeta": {
-      "display": { "displayName": "Display", "purpose": "The Constellation wordmark and finale titles; extreme 0.55em tracking." },
-      "headline": { "displayName": "Headline", "purpose": "Category-select prompt and finale tier name." },
-      "question": { "displayName": "Question", "purpose": "The live trivia question; light, large Outfit with faint teal glow." },
-      "body": { "displayName": "Body", "purpose": "Supporting copy and answer text; airy weight 350." },
-      "label": { "displayName": "Label", "purpose": "Meta rows, tile captions, verdicts; wide-tracked uppercase Unbounded." }
+      "display": { "displayName": "Display", "purpose": "The 'Almanac' wordmark and finale titles. Extreme 0.55em tracking is the signature; the word spreads across the header like stars across a horizon." },
+      "headline": { "displayName": "Headline", "purpose": "The category-select prompt ('Which sky will you chart?') and the finale tier name." },
+      "question": { "displayName": "Question", "purpose": "The live trivia question, set large and light in Outfit with a faint ember text-glow. Drops to 24px under 720px." },
+      "body": { "displayName": "Body", "purpose": "Supporting copy and answer text. Prose capped at 65-75ch; the finale toast uses a 46ch measure." },
+      "label": { "displayName": "Label", "purpose": "The meta row ('Star 03 / 10'), category captions, verdict lines. Small, wide, quiet." }
     },
     "shadows": [
-      { "name": "tile-hover-glow", "value": "0 0 40px -8px var(--color-teal)", "purpose": "Teal glow on hover/focus of category tiles." },
-      { "name": "answer-hover-glow", "value": "0 0 26px -6px var(--color-teal)", "purpose": "Teal glow on hover of answer rows." },
-      { "name": "star-glow", "value": "drop-shadow(0 0 6px var(--color-stargold))", "purpose": "Halo on lit constellation nodes and the teal current-question pulse." },
-      { "name": "score-glow", "value": "0 0 40px rgb(110 231 216 / 0.35)", "purpose": "Text glow on the big finale score numeral only." }
+      { "name": "ember-hover-tile", "value": "0 0 40px -8px var(--color-ember)", "purpose": "Hover/focus glow on category tiles. Signals energy, never height." },
+      { "name": "ember-hover-answer", "value": "0 0 26px -6px var(--color-ember)", "purpose": "Hover/focus glow on answer rows, tighter than the tile glow." },
+      { "name": "star-glow", "value": "drop-shadow(0 0 6px currentColor)", "purpose": "On lit star-chart nodes and the current-question pulse." },
+      { "name": "score-glow", "value": "text-shadow: 0 0 40px rgb(255 179 138 / 0.35)", "purpose": "The big finale score numeral only." }
     ],
     "motion": [
-      { "name": "ease-star", "value": "cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "Standard ease-out for every state transition and keyframe." },
-      { "name": "fade-in", "value": "fade-in 0.6s ease-star both", "purpose": "Phase entrances." },
-      { "name": "drift-in", "value": "drift-in 0.6s ease-star both", "purpose": "Staggered tile and answer-row entrances (translateY 16px + fade)." },
-      { "name": "slide-up", "value": "slide-up 0.35s ease-star", "purpose": "Verdict line arrival." },
-      { "name": "pop", "value": "pop 0.3s ease-star", "purpose": "Score number and selected radio dot (scale 1.3 to 1)." },
-      { "name": "aurora-move", "value": "aurora-move 18s ease-star infinite alternate", "purpose": "Slow drift of the backdrop aurora blobs." },
-      { "name": "twinkle", "value": "twinkle 3s ease-in-out infinite alternate", "purpose": "Per-star opacity flicker in the starfield." },
-      { "name": "shoot", "value": "shoot 9s linear infinite", "purpose": "Periodic shooting star across the sky." },
-      { "name": "orbit-spin", "value": "orbit-spin 3s linear infinite", "purpose": "Loader satellite orbiting the gold core." },
-      { "name": "star-pulse", "value": "star-pulse 1.4s ease-star infinite", "purpose": "The current-question node pulsing teal." }
+      { "name": "ease-star", "value": "cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "The only easing in the system. Every entrance settles without overshoot; no bounce, no elastic." },
+      { "name": "aurora-move", "value": "18s ease-star infinite alternate", "purpose": "Slow translate-only drift on the blurred aurora blobs. Transform-only keeps them on the compositor." },
+      { "name": "star-pulse", "value": "1.4s ease-star infinite", "purpose": "Opacity pulse on the current-question node in the star chart." },
+      { "name": "drift-in", "value": "0.6s ease-star both", "purpose": "Staggered entrance for category tiles and answer rows (60ms step)." },
+      { "name": "orbit-spin", "value": "3s linear infinite", "purpose": "The loader's ember satellite circling its gold core." }
     ],
     "breakpoints": [
-      { "name": "sm", "value": "460px" },
-      { "name": "md", "value": "500px" },
-      { "name": "lg", "value": "720px" }
+      { "name": "answers-stack", "value": "500px" },
+      { "name": "compact", "value": "520px" },
+      { "name": "question-shrink", "value": "720px" }
     ]
   },
   "components": [
@@ -49,76 +50,108 @@
       "name": "Primary Button",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "Glass pill for the main action (Next star, Chart again, Try Again).",
+      "description": "The main action, used to advance a question or replay. Ember text on a whisper-thin ember wash.",
       "html": "<button class=\"ds-btn-primary\">Next star</button>",
-      "css": ".ds-btn-primary { font-family: Unbounded, sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--color-teal); background: color-mix(in oklab, var(--color-teal) 5%, transparent); border: 1px solid color-mix(in oklab, var(--color-teal) 50%, transparent); border-radius: 9999px; padding: 16px 36px; cursor: pointer; transition: background 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s cubic-bezier(0.4,0,0.2,1); } .ds-btn-primary:hover { background: color-mix(in oklab, var(--color-teal) 15%, transparent); box-shadow: 0 0 30px -4px var(--color-teal); } .ds-btn-primary:focus-visible { outline: 2px solid var(--color-teal); outline-offset: 2px; }"
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; border-radius: 9999px; padding: 16px 36px; font-family: Unbounded, sans-serif; font-size: 12px; font-weight: 300; text-transform: uppercase; letter-spacing: 0.34em; cursor: pointer; color: var(--color-ember, #ffb38a); background: color-mix(in srgb, var(--color-ember, #ffb38a) 5%, transparent); border: 1px solid color-mix(in srgb, var(--color-ember, #ffb38a) 50%, transparent); transition: background 300ms cubic-bezier(0.4,0,0.2,1), box-shadow 300ms cubic-bezier(0.4,0,0.2,1); } .ds-btn-primary:hover { background: color-mix(in srgb, var(--color-ember, #ffb38a) 15%, transparent); box-shadow: 0 0 30px -4px var(--color-ember, #ffb38a); } .ds-btn-primary:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--color-ember, #ffb38a); }"
     },
     {
       "name": "Quiet Button",
       "kind": "button",
       "refersTo": "button-quiet",
-      "description": "Secondary ghost action.",
-      "html": "<button class=\"ds-btn-quiet\">Change subject</button>",
-      "css": ".ds-btn-quiet { font-family: Unbounded, sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--color-fog); background: transparent; border: 1px solid color-mix(in oklab, var(--color-fog) 40%, transparent); border-radius: 9999px; padding: 16px 36px; cursor: pointer; transition: color 0.3s, border-color 0.3s; } .ds-btn-quiet:hover { color: var(--color-starlight); border-color: var(--color-fog); }"
+      "description": "The secondary finale action. Transparent with a fog border; hover lifts the text to starlight.",
+      "html": "<button class=\"ds-btn-quiet\">New subject</button>",
+      "css": ".ds-btn-quiet { display: inline-flex; align-items: center; justify-content: center; border-radius: 9999px; padding: 16px 36px; font-family: Unbounded, sans-serif; font-size: 12px; font-weight: 300; text-transform: uppercase; letter-spacing: 0.34em; cursor: pointer; background: transparent; color: var(--color-fog, #aab3cd); border: 1px solid color-mix(in srgb, var(--color-fog, #aab3cd) 40%, transparent); transition: color 300ms cubic-bezier(0.4,0,0.2,1), border-color 300ms cubic-bezier(0.4,0,0.2,1); } .ds-btn-quiet:hover { color: var(--color-starlight, #e8eeff); border-color: var(--color-fog, #aab3cd); } .ds-btn-quiet:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--color-ember, #ffb38a); }"
     },
     {
       "name": "Category Tile",
       "kind": "card",
       "refersTo": "category-tile",
-      "description": "Glass tile in the category grid with a teal line icon.",
-      "html": "<button class=\"ds-tile\"><span class=\"ds-tile-disc\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M3 12h18M12 3c2.7 2.6 4 5.7 4 9s-1.3 6.4-4 9c-2.7-2.6-4-5.7-4-9s1.3-6.4 4-9Z\"/></svg></span><span class=\"ds-tile-name\">Geography</span><span class=\"ds-tile-sub\">10 stars</span></button>",
-      "css": ".ds-tile { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 24px 16px; border-radius: 12px; background: color-mix(in oklab, var(--color-starlight) 3%, transparent); border: 1px solid color-mix(in oklab, var(--color-starlight) 12%, transparent); backdrop-filter: blur(4px); cursor: pointer; transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), border-color 0.3s, background 0.3s, box-shadow 0.3s; } .ds-tile:hover { transform: translateY(-3px); border-color: color-mix(in oklab, var(--color-teal) 60%, transparent); background: color-mix(in oklab, var(--color-teal) 5%, transparent); box-shadow: 0 0 40px -8px var(--color-teal); } .ds-tile-disc { display: grid; place-content: center; width: 46px; height: 46px; color: var(--color-teal); } .ds-tile-name { font-family: Unbounded, sans-serif; font-weight: 300; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-starlight); } .ds-tile-sub { font-size: 9.5px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--color-fog); }"
+      "description": "One of four glass tiles on the opening screen. Monochrome ember icon in a disc, wide-tracked caption, 3px lift on hover.",
+      "html": "<button class=\"ds-tile\"><span class=\"ds-tile-icon\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" width=\"24\" height=\"24\"><path d=\"M4 18 9 8l4 5 3-2 4 7\"/><circle cx=\"9\" cy=\"8\" r=\"1.2\" fill=\"currentColor\"/><circle cx=\"16\" cy=\"11\" r=\"1.4\" fill=\"currentColor\"/></svg></span><span class=\"ds-tile-name\">Science</span><span class=\"ds-tile-meta\">10 stars</span></button>",
+      "css": ".ds-tile { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 24px 16px; border-radius: 12px; cursor: pointer; background: color-mix(in srgb, var(--color-starlight, #e8eeff) 3%, transparent); border: 1px solid color-mix(in srgb, var(--color-starlight, #e8eeff) 12%, transparent); backdrop-filter: blur(4px); transition: transform 300ms cubic-bezier(0.4,0,0.2,1), border-color 300ms cubic-bezier(0.4,0,0.2,1), background 300ms cubic-bezier(0.4,0,0.2,1), box-shadow 300ms cubic-bezier(0.4,0,0.2,1); } .ds-tile:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--color-ember, #ffb38a) 60%, transparent); background: color-mix(in srgb, var(--color-ember, #ffb38a) 5%, transparent); box-shadow: 0 0 40px -8px var(--color-ember, #ffb38a); } .ds-tile:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--color-ember, #ffb38a); } .ds-tile-icon { display: grid; place-content: center; width: 46px; height: 46px; color: var(--color-ember, #ffb38a); } .ds-tile-name { font-family: Unbounded, sans-serif; font-size: 13px; font-weight: 300; text-transform: uppercase; letter-spacing: 0.12em; color: var(--color-starlight, #e8eeff); } .ds-tile-meta { font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.3em; color: var(--color-fog, #aab3cd); }"
     },
     {
       "name": "Answer Row",
       "kind": "input",
       "refersTo": "answer-row",
-      "description": "Glass label row with a restyled radio key-dot; correct/wrong/dim locked states.",
-      "html": "<label class=\"ds-answer\"><span class=\"ds-answer-dot\"></span><span>The Nile</span></label>",
-      "css": ".ds-answer { display: flex; align-items: center; gap: 14px; padding: 14px 22px; border-radius: 12px; font-family: Outfit, sans-serif; font-weight: 300; font-size: 15px; color: var(--color-starlight); background: color-mix(in oklab, var(--color-starlight) 3%, transparent); border: 1px solid color-mix(in oklab, var(--color-starlight) 15%, transparent); backdrop-filter: blur(4px); cursor: pointer; transition: border-color 0.2s, background 0.2s, box-shadow 0.2s; } .ds-answer:hover { border-color: color-mix(in oklab, var(--color-teal) 60%, transparent); box-shadow: 0 0 26px -6px var(--color-teal); } .ds-answer-dot { flex: none; width: 10px; height: 10px; border-radius: 9999px; background: color-mix(in oklab, var(--color-starlight) 25%, transparent); }"
+      "description": "A glass label wrapping a real radio. All four share a name, so the group keeps native arrow-key movement and a single tab stop.",
+      "html": "<label class=\"ds-answer\"><input class=\"ds-answer-dot\" type=\"radio\" name=\"ds-demo\" value=\"Jupiter\" aria-label=\"Jupiter\" /><span>Jupiter</span></label>",
+      "css": ".ds-answer { display: flex; align-items: center; gap: 14px; padding: 14px 22px; border-radius: 12px; cursor: pointer; font-family: Outfit, sans-serif; font-size: 15px; font-weight: 300; line-height: 24px; color: var(--color-starlight, #e8eeff); background: color-mix(in srgb, var(--color-starlight, #e8eeff) 3%, transparent); border: 1px solid color-mix(in srgb, var(--color-starlight, #e8eeff) 15%, transparent); backdrop-filter: blur(4px); transition: border-color 200ms cubic-bezier(0.4,0,0.2,1), background 200ms cubic-bezier(0.4,0,0.2,1), box-shadow 200ms cubic-bezier(0.4,0,0.2,1); } .ds-answer:hover { border-color: color-mix(in srgb, var(--color-ember, #ffb38a) 60%, transparent); background: color-mix(in srgb, var(--color-ember, #ffb38a) 5%, transparent); box-shadow: 0 0 26px -6px var(--color-ember, #ffb38a); } .ds-answer:has(:focus-visible) { box-shadow: 0 0 0 2px var(--color-ember, #ffb38a); } .ds-answer-dot { appearance: none; margin: 0; width: 10px; height: 10px; flex: none; border-radius: 9999px; outline: none; cursor: pointer; background: color-mix(in srgb, var(--color-starlight, #e8eeff) 25%, transparent); transition: background 200ms cubic-bezier(0.4,0,0.2,1); } .ds-answer-dot:checked { background: var(--color-ember, #ffb38a); box-shadow: 0 0 10px var(--color-ember, #ffb38a); }"
     },
     {
-      "name": "Constellation Progress",
+      "name": "Answer Row (locked correct)",
+      "kind": "input",
+      "refersTo": "answer-correct",
+      "description": "The resolved correct choice. Green border and tint with a glowing green dot; green now reads as complementary against the red sky.",
+      "html": "<label class=\"ds-answer-correct\"><span class=\"ds-dot-correct\"></span><span>Jupiter</span></label>",
+      "css": ".ds-answer-correct { display: flex; align-items: center; gap: 14px; padding: 14px 22px; border-radius: 12px; font-family: Outfit, sans-serif; font-size: 15px; font-weight: 300; line-height: 24px; color: var(--color-starlight, #e8eeff); background: color-mix(in srgb, var(--color-correct, #7be8a2) 8%, transparent); border: 1px solid color-mix(in srgb, var(--color-correct, #7be8a2) 70%, transparent); backdrop-filter: blur(4px); } .ds-dot-correct { width: 10px; height: 10px; flex: none; border-radius: 9999px; background: var(--color-correct, #7be8a2); box-shadow: 0 0 10px var(--color-correct, #7be8a2); }"
+    },
+    {
+      "name": "Answer Row (locked wrong)",
+      "kind": "input",
+      "refersTo": "answer-wrong",
+      "description": "The chosen wrong answer. Signal Rose is held 21 degrees off the backdrop hue so the error still reads as an alarm rather than atmosphere.",
+      "html": "<label class=\"ds-answer-wrong\"><span class=\"ds-dot-wrong\"></span><span>Saturn</span></label>",
+      "css": ".ds-answer-wrong { display: flex; align-items: center; gap: 14px; padding: 14px 22px; border-radius: 12px; font-family: Outfit, sans-serif; font-size: 15px; font-weight: 300; line-height: 24px; color: var(--color-starlight, #e8eeff); background: color-mix(in srgb, var(--color-wrong, #ffa8cf) 8%, transparent); border: 1px solid color-mix(in srgb, var(--color-wrong, #ffa8cf) 70%, transparent); backdrop-filter: blur(4px); } .ds-dot-wrong { width: 10px; height: 10px; flex: none; border-radius: 9999px; background: var(--color-wrong, #ffa8cf); box-shadow: 0 0 10px var(--color-wrong, #ffa8cf); }"
+    },
+    {
+      "name": "Star Chart Progress",
       "kind": "custom",
-      "refersTo": null,
-      "description": "Signature progress meter: answered questions light stars, adjacent lit stars connect gold.",
-      "html": "<svg class=\"ds-constellation\" viewBox=\"0 0 800 64\" preserveAspectRatio=\"none\"><line x1=\"40\" y1=\"24\" x2=\"200\" y2=\"40\" class=\"ds-line-lit\"/><line x1=\"200\" y1=\"40\" x2=\"360\" y2=\"18\" class=\"ds-line\"/><circle cx=\"40\" cy=\"24\" r=\"4.5\" class=\"ds-node-gold\"/><circle cx=\"200\" cy=\"40\" r=\"3\" class=\"ds-node-fog\"/><circle cx=\"360\" cy=\"18\" r=\"4\" class=\"ds-node-now\"/><circle cx=\"520\" cy=\"46\" r=\"3\" class=\"ds-node-future\"/></svg>",
-      "css": ".ds-constellation { display: block; width: 100%; height: 64px; overflow: visible; } .ds-line { stroke: color-mix(in oklab, var(--color-starlight) 25%, transparent); stroke-width: 1; } .ds-line-lit { stroke: color-mix(in oklab, var(--color-stargold) 60%, transparent); stroke-width: 1; } .ds-node-gold { fill: var(--color-stargold); filter: drop-shadow(0 0 6px var(--color-stargold)); } .ds-node-fog { fill: var(--color-fog); } .ds-node-now { fill: var(--color-teal); filter: drop-shadow(0 0 6px var(--color-teal)); animation: ds-pulse 1.4s cubic-bezier(0.4,0,0.2,1) infinite; } .ds-node-future { fill: color-mix(in oklab, var(--color-starlight) 20%, transparent); } @keyframes ds-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }"
+      "description": "The signature component. Ten nodes across the top of the play area: gold and glowing when correct, fog when missed, pulsing ember for the current question, dim for the ones ahead. Lines light gold between adjacent answered nodes.",
+      "html": "<div class=\"ds-chart\"><svg viewBox=\"0 0 800 64\" preserveAspectRatio=\"none\"><line class=\"ds-chart-line-lit\" x1=\"40\" y1=\"30\" x2=\"120\" y2=\"18\"/><line class=\"ds-chart-line\" x1=\"120\" y1=\"18\" x2=\"200\" y2=\"42\"/><line class=\"ds-chart-line\" x1=\"200\" y1=\"42\" x2=\"280\" y2=\"24\"/><circle class=\"ds-node-gold\" cx=\"40\" cy=\"30\" r=\"4.5\"/><circle class=\"ds-node-gold\" cx=\"120\" cy=\"18\" r=\"4.5\"/><circle class=\"ds-node-current\" cx=\"200\" cy=\"42\" r=\"4\"/><circle class=\"ds-node-future\" cx=\"280\" cy=\"24\" r=\"3\"/></svg></div>",
+      "css": ".ds-chart { width: 100%; } .ds-chart svg { width: 100%; height: 64px; overflow: visible; } .ds-chart-line { stroke: color-mix(in srgb, var(--color-fog, #aab3cd) 40%, transparent); stroke-width: 1; } .ds-chart-line-lit { stroke: var(--color-stargold, #ffd98e); stroke-width: 1; opacity: 0.7; } .ds-node-gold { fill: var(--color-stargold, #ffd98e); filter: drop-shadow(0 0 6px var(--color-stargold, #ffd98e)); } .ds-node-current { fill: var(--color-ember, #ffb38a); filter: drop-shadow(0 0 6px var(--color-ember, #ffb38a)); animation: ds-pulse 1.4s cubic-bezier(0.4,0,0.2,1) infinite; } .ds-node-future { fill: color-mix(in srgb, var(--color-starlight, #e8eeff) 20%, transparent); } @keyframes ds-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }"
+    },
+    {
+      "name": "Loader",
+      "kind": "custom",
+      "description": "Shown while the model generates a round. A gold core with a dashed ring and one ember satellite in orbit; a spinner rather than a skeleton because the wait has unknowable shape.",
+      "html": "<div class=\"ds-loader\"><div class=\"ds-loader-orbit\"><span class=\"ds-loader-core\"></span><span class=\"ds-loader-ring\"><span class=\"ds-loader-sat\"></span></span></div><p class=\"ds-loader-caption\">Charting the sky…</p></div>",
+      "css": ".ds-loader { display: flex; flex-direction: column; align-items: center; gap: 28px; padding: 64px 0; text-align: center; } .ds-loader-orbit { position: relative; width: 90px; height: 90px; } .ds-loader-core { position: absolute; inset: 34px; border-radius: 9999px; background: var(--color-stargold, #ffd98e); box-shadow: 0 0 24px var(--color-stargold, #ffd98e); } .ds-loader-ring { position: absolute; inset: 0; border-radius: 9999px; border: 1px dashed color-mix(in srgb, var(--color-starlight, #e8eeff) 20%, transparent); animation: ds-orbit 3s linear infinite; } .ds-loader-sat { position: absolute; top: -5px; left: 50%; width: 10px; height: 10px; border-radius: 9999px; background: var(--color-ember, #ffb38a); box-shadow: 0 0 10px var(--color-ember, #ffb38a); } .ds-loader-caption { font-family: Unbounded, sans-serif; font-size: 12px; font-weight: 300; text-transform: uppercase; letter-spacing: 0.34em; color: var(--color-fog, #aab3cd); } @keyframes ds-orbit { to { rotate: 360deg; } }"
     }
   ],
   "narrative": {
-    "northStar": "The Observatory",
-    "overview": "This is the quiet hour at an observatory: lights down, the dome open, a deep field of stars overhead, and a single instrument glowing softly in front of you. The interface is atmosphere first and controls second. A near-black canvas holds a drifting aurora and a scatter of twinkling stars; the UI sits on top of it in restrained translucent glass, never a solid slab, never a bright card. The signature idea is that your score is not a readout but a drawing: each answered question lights a star in a constellation that assembles itself across the top of the play area, gold for a hit, faded for a miss.",
+    "northStar": "The Red Observatory",
+    "overview": "This is the hour before dawn at a high-altitude observatory: the dome is open, a red aurora is burning low across the sky, and one instrument glows softly in front of you. The interface is atmosphere first and controls second. A near-black canvas holds a bank of deep red washes and a scatter of twinkling stars; the UI sits on top in restrained translucent glass, never a solid slab, never a bright card. The signature idea is that your score is not a readout but a drawing: each answered question lights a star in a chart that assembles itself across the top of the play area, gold for a hit, faded for a miss.\n\nThe red is doing real work. An earlier version of this system ran cool teal-green over the same black, which is the reflex palette for anything described as \"cosmic\" and made the interface read as generic sci-fi. Turning the sky red moved it somewhere specific: aurora australis, a blood moon, an old star atlas printed in rust. Because the backdrop is now warm, the single interactive accent had to move with it, from teal to a soft peach ember. Warm-on-warm reads as one world instead of two competing ones.\n\nThe system rejects the visual language of the category on purpose. It is not a quiz-app playground, not a gamified casino, not a corporate dashboard, and not AI slop. Restraint is the point: one accent does the work, the wordmark carries its weight through wide tracking rather than a fill, and the sky does the rest.",
     "keyCharacteristics": [
-      "Near-black cosmic canvas with a live aurora + starfield backdrop.",
+      "Near-black canvas beneath a bank of deep red aurora washes.",
       "Frameless, translucent-glass surfaces; no opaque cards.",
-      "One working accent (teal); gold is earned, never decorative.",
-      "Progress rendered as a self-drawing constellation.",
+      "One working accent (ember peach); gold is earned, never decorative.",
+      "Progress rendered as a self-drawing star chart.",
       "Unbounded display with extreme letter-spacing; airy light-weight Outfit body.",
       "Motion is meaningful and eased-out; every animation names an event."
     ],
     "rules": [
-      { "name": "The One Voice Rule", "body": "Teal is the only interactive color. If a control lights up, hovers, focuses, or pulses, it is teal, never gold, violet, or green.", "section": "colors" },
+      { "name": "The One Voice Rule", "body": "Ember is the only interactive color. If a control lights up, hovers, focuses, or pulses, it is ember, never gold, violet, or green. Gold cannot be used to signal interactivity; it only marks something already won.", "section": "colors" },
       { "name": "The Earned Gold Rule", "body": "Gold appears only as a consequence of a correct answer or a finished score. It is forbidden as decoration, as a border, or as a hover state.", "section": "colors" },
-      { "name": "The Wide-Tracking Rule", "body": "Every uppercase Unbounded label carries at least 0.22em tracking; the wordmark carries 0.55em. Tight uppercase is forbidden.", "section": "typography" },
-      { "name": "The No-Shadow Rule", "body": "Surfaces cast no drop shadows. If something needs to feel active, it glows; if it needs separation, it uses translucency and blur.", "section": "elevation" }
+      { "name": "The Hue Distance Rule", "body": "Because the backdrop is red, any color carrying meaning must sit at least 20 degrees of hue away from it. Measure before shipping a semantic color; a signal that shares the sky's hue is not a signal.", "section": "colors" },
+      { "name": "The Single Source Rule", "body": "The canvas washes are mixed from the aurora tokens with color-mix, never restated as literal rgba(). Backdrop and palette move together or they drift.", "section": "colors" },
+      { "name": "The Wide-Tracking Rule", "body": "Every uppercase Unbounded label carries at least 0.22em tracking, and the wordmark carries 0.55em. Tight uppercase is forbidden; the spacing is what makes it feel cosmic rather than corporate.", "section": "typography" },
+      { "name": "The Display-In-Controls Exception", "body": "Product convention says keep display faces out of buttons and labels. This system overrides that on purpose: the wide-tracked Unbounded label is the brand, and it appears on buttons, meta rows, and captions. The override is deliberate and documented; do not fix it by swapping in a body font.", "section": "typography" },
+      { "name": "The No-Shadow Rule", "body": "Surfaces cast no drop shadows. If something needs to feel active, it glows; if it needs separation, it uses translucency and blur. A 2014-style dark box-shadow under a card is forbidden.", "section": "elevation" },
+      { "name": "The Fixed-Layer Rule", "body": "All atmosphere renders on one position: fixed layer (.aurora-canvas, applied to the NightSky element). background-attachment: fixed is forbidden; it repaints badly on iOS Safari over multi-stop radial gradients.", "section": "elevation" }
     ],
     "dos": [
-      "Do keep teal as the only interactive color and gold as reward-only.",
-      "Do render foreground surfaces as translucent glass over the live sky.",
-      "Do convey depth with glow and translucency, never drop shadows.",
-      "Do track uppercase Unbounded labels at 0.22em or wider.",
-      "Do map every animation to a real event and ease out; provide a prefers-reduced-motion settle.",
-      "Do keep progress available to screen readers via the constellation's live-text fallback."
+      "Do keep ember as the only interactive color and gold as reward-only (the One Voice and Earned Gold rules).",
+      "Do measure hue distance and contrast against the deepest aurora overlap on a glass surface, not against flat Void. That is the tightest case; anything that passes there passes everywhere.",
+      "Do render foreground surfaces as translucent glass over the live sky (bg-starlight/3, backdrop-blur-sm), so the aurora reads faintly through.",
+      "Do convey depth with glow and translucency, never drop shadows (the No-Shadow rule).",
+      "Do track uppercase Unbounded labels at 0.22em or wider (the Wide-Tracking rule).",
+      "Do mix backdrop colors from the aurora tokens with color-mix (the Single Source rule).",
+      "Do map every animation to a real event (a star igniting, the sky charting) and ease out; provide a prefers-reduced-motion settle for all ambient motion.",
+      "Do let native form semantics do the work: a shared radio name instead of hand-rolled Tab interception.",
+      "Do keep progress available to screen readers via the chart's live-text fallback; never rely on color alone."
     ],
     "donts": [
-      "Don't reintroduce opaque cards or the old white panel; no card grids, and never nest a glass surface inside another.",
-      "Don't drift toward generic quiz-app SaaS (Kahoot/Quizizz primary-color cartoon energy).",
-      "Don't turn it into a gamified neon casino (coin showers, slot glitz, streak-pressure loops).",
-      "Don't let it flatten into a corporate dashboard (Material/Bootstrap gray-on-white card grids).",
-      "Don't ship AI slop: no gradient text anywhere (wordmark and finale title are solid color), no decorative glassmorphism, no hero-metric template, no identical card grids.",
-      "Don't use #000 or #fff for surfaces or text.",
-      "Don't put a colored border-left stripe on any row or callout."
+      "Don't reintroduce opaque cards or a white panel; no card grids, and never nest a glass surface inside another.",
+      "Don't drift toward generic quiz-app SaaS (Kahoot/Quizizz primary-color cartoon energy, bubbly rounded mascots).",
+      "Don't turn it into a gamified neon casino (coin showers, slot glitz, streak-pressure reward loops).",
+      "Don't let it flatten into a flat corporate dashboard (Material/Bootstrap gray-on-white card grids, zero atmosphere).",
+      "Don't ship AI slop: no gradient text anywhere (the wordmark and finale title are solid color), no decorative glassmorphism on opaque pages, no hero-metric template, no identical card grids.",
+      "Don't use a semantic color that shares the backdrop's hue. If it looks like part of the sky, it has stopped being a signal.",
+      "Don't use #000 or #fff for surfaces or text; the canvas is Void (#050810) and text is Starlight (#e8eeff).",
+      "Don't put a colored border-left stripe on any row or callout; answer states use full borders + tint.",
+      "Don't use background-attachment: fixed; atmosphere belongs on the one fixed NightSky layer.",
+      "Don't hand-roll keyboard navigation for standard controls. If you are intercepting Tab, you have skipped a native affordance."
     ]
   }
 }

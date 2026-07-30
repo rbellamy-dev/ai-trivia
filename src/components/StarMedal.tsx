@@ -1,14 +1,14 @@
 export type MedalTier = "gold" | "silver" | "bronze";
 
 const TIER = {
-  gold: { core: "var(--color-stargold)", halo: "var(--color-teal)", label: "Gold constellation medal" },
+  gold: { core: "var(--color-stargold)", halo: "var(--color-ember)", label: "Gold constellation medal" },
   silver: { core: "var(--color-star-silver)", halo: "var(--color-violet)", label: "Silver constellation medal" },
   bronze: { core: "var(--color-star-bronze)", halo: "var(--color-fog)", label: "Bronze constellation medal" },
 } as const;
 
 /**
  * The finale medal: a small asterism of connected stars inside a haloed ring,
- * echoing the game's core idea that the score is a constellation. Tinted by tier.
+ * echoing the game's core idea that the score is an almanac of stars. Tinted by tier.
  */
 const StarMedal = ({ tier }: { tier: MedalTier }) => {
   const { core, halo, label } = TIER[tier];

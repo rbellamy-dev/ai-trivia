@@ -31,22 +31,24 @@ const NightSky = () => {
   const [stars, setStars] = useState<Star[]>([]);
 
   useEffect(() => {
-    setStars(genStars(110));
+    setStars(genStars(50));
   }, []);
 
   return (
     <div
       aria-hidden="true"
-      className="fixed inset-0 -z-10 overflow-hidden bg-night"
+      className="aurora-canvas fixed inset-0 -z-10 overflow-hidden"
     >
-      {/* aurora glow */}
-      <span className="absolute -top-[12vh] -left-[10vw] h-[42vh] w-[60vw] rounded-full bg-aurora-1 opacity-30 blur-[90px] animate-aurora" />
+      {/* aurora glow — translate-only animation (no scale) keeps these blurred
+          layers on the compositor without re-rastering the blur each frame.
+          A continuously-animated transform is auto-promoted, so no will-change. */}
+      <span className="absolute -top-[12vh] -left-[10vw] h-[42vh] w-[60vw] rounded-full bg-aurora-1 opacity-50 blur-[90px] animate-aurora" />
       <span
         className="absolute -bottom-[14vh] -right-[8vw] h-[42vh] w-[50vw] rounded-full bg-aurora-2 opacity-30 blur-[90px] animate-aurora"
         style={{ animationDelay: "-9s" }}
       />
       <span
-        className="absolute top-[34vh] right-[18vw] h-[30vh] w-[34vw] rounded-full bg-aurora-3 opacity-30 blur-[90px] animate-aurora"
+        className="absolute top-[34vh] right-[18vw] h-[30vh] w-[34vw] rounded-full bg-aurora-3 opacity-50 blur-[90px] animate-aurora"
         style={{ animationDelay: "-4s" }}
       />
 

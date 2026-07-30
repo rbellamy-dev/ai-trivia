@@ -1,23 +1,23 @@
 @import "tailwindcss";
 
 /* ─────────────────────────────────────────────────────────────
-   Constellation theme — design tokens
-   Source of truth: design/variation-4-constellation.html
+   Almanac theme — design tokens
+   Source of truth: design/variation-4-almanac.html
    ───────────────────────────────────────────────────────────── */
 @theme {
   /* colors */
   --color-night: #050810;
   --color-deep: #0a1020;
   --color-starlight: #e8eeff; /* text; use /3 /12 /15 /20 /25 for glass surfaces */
-  --color-fog: #7c86a6; /* dim text — lightened to clear WCAG AA (>=4.5:1 on --color-night) */
-  --color-teal: #6ee7d8; /* the one working accent */
+  --color-fog: #aab3cd; /* dim text — clears AA (4.7:1) on glass over the deepest aurora overlap */
+  --color-ember: #ffb38a; /* the one working accent — soft peach against the red aurora */
   --color-violet: #a78bfa;
   --color-stargold: #ffd98e;
   --color-correct: #7be8a2;
-  --color-wrong: #ff7b8a;
-  --color-aurora-1: #1c4b45;
-  --color-aurora-2: #2a1f5e;
-  --color-aurora-3: #143a5c;
+  --color-wrong: #ffa8cf; /* signal rose — held 21deg off the backdrop hue so errors stay legible */
+  --color-aurora-1: #8c202a; /* strong red wash */
+  --color-aurora-2: #2a1f5e; /* indigo — kept for cosmic depth */
+  --color-aurora-3: #6e1830; /* wine red wash */
   --color-star-silver: #c8d4f5;
   --color-star-bronze: #d9a878;
 
@@ -77,10 +77,10 @@
   }
   @keyframes aurora-move {
     from {
-      transform: translate(0, 0) scale(1);
+      transform: translate(0, 0);
     }
     to {
-      transform: translate(4vw, 3vh) scale(1.12);
+      transform: translate(4vw, 3vh);
     }
   }
   @keyframes twinkle {
@@ -149,6 +149,34 @@ body {
 #__next,
 body > div {
   height: 100%;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Aurora canvas
+
+   The red washes live on the NightSky layer (already `position: fixed`,
+   already composited) rather than on <body>. Putting them here avoids
+   `background-attachment: fixed`, which repaints badly on iOS Safari over
+   multi-stop radial gradients. Colours are mixed from the aurora tokens so
+   the backdrop and the palette can never drift apart.
+   ───────────────────────────────────────────────────────────── */
+.aurora-canvas {
+  background:
+    radial-gradient(
+      65% 50% at 20% 8%,
+      color-mix(in srgb, var(--color-aurora-1) 70%, transparent),
+      transparent 72%
+    ),
+    radial-gradient(
+      60% 45% at 80% 18%,
+      color-mix(in srgb, var(--color-aurora-3) 62%, transparent),
+      transparent 74%
+    ),
+    radial-gradient(
+      70% 40% at 50% 105%,
+      color-mix(in srgb, var(--color-aurora-3) 35%, transparent),
+      transparent 70%
+    );
 }
 
 /* Respect users who prefer reduced motion. */

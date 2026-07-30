@@ -13,8 +13,8 @@ const genNodes = (count: number): Node[] => {
 };
 
 /**
- * Progress rendered as a self-drawing constellation. Each question is a star:
- * gold + glow when answered correctly, faded when missed, pulsing teal for the
+ * Progress rendered as a self-drawing star chart. Each question is a star:
+ * gold + glow when answered correctly, faded when missed, pulsing ember for the
  * current question, dim for the unanswered ones ahead. A line between two
  * stars lights gold once both of its endpoints have been answered.
  *
@@ -22,7 +22,7 @@ const genNodes = (count: number): Node[] => {
  * during the (never-server-rendered) playing phase and unmounts between games,
  * so the useState initializer is hydration-safe and re-randomizes each game.
  */
-const Constellation = ({
+const Almanac = ({
   count,
   results,
   currentIndex,
@@ -72,7 +72,7 @@ const Constellation = ({
             cls = "fill-fog";
           } else if (isCurrent) {
             cls =
-              "fill-teal drop-shadow-[0_0_6px_var(--color-teal)] animate-star-pulse";
+              "fill-ember drop-shadow-[0_0_6px_var(--color-ember)] animate-star-pulse";
             r = 4;
           }
 
@@ -88,4 +88,4 @@ const Constellation = ({
   );
 };
 
-export default Constellation;
+export default Almanac;

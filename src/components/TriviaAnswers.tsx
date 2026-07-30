@@ -1,4 +1,4 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, KeyboardEvent } from "react";
 
 const TriviaAnswers = ({
   isDisabled,
@@ -15,24 +15,21 @@ const TriviaAnswers = ({
   correctAnswers: string[];
   questionIndex: number;
 }) => {
-  const handleTab = (event: any) => {
-    //handles tab selection
-    const target = event.currentTarget as HTMLInputElement;
-    if (event.key.toLowerCase() === "tab") {
-      const form = event.target.form;
-      const index = [...form].indexOf(event.target);
-      if (index < form.length - 1) {
-        form.elements[index + 1].focus();
-        event.preventDefault();
-      }
-    } else if (event.key.toLowerCase() === "enter") {
-      handleAnswer(null, target.value);
+  // The radios share a `name`, so they behave as a native radio group: one tab
+  // stop, arrow keys move between options, Tab/Shift+Tab leave the group in the
+  // expected direction. Enter is added on top (radios only answer to Space
+  // natively) and is prevented from triggering implicit form submission.
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      handleAnswer(null, event.currentTarget.value);
     }
   };
 
   return (
     <form
       key={questionIndex}
+      onSubmit={(event) => event.preventDefault()}
       className="answers mt-4 grid grid-cols-2 gap-3 text-left max-[500px]:grid-cols-1"
     >
       {answerChoices.map((value: string, index: number) => {
@@ -41,7 +38,7 @@ const TriviaAnswers = ({
 
         // Post-answer states (isDisabled goes true once a choice is locked).
         let stateCls =
-          "border-starlight/15 bg-starlight/3 hover:border-teal/60 hover:bg-teal/5 hover:shadow-[0_0_26px_-6px_var(--color-teal)]";
+          "border-starlight/15 bg-starlight/3 hover:border-ember/60 hover:bg-ember/5 hover:shadow-[0_0_26px_-6px_var(--color-ember)]";
         let dotCls = "bg-starlight/25";
         if (isDisabled) {
           if (isCorrect) {
@@ -59,18 +56,19 @@ const TriviaAnswers = ({
         return (
           <label
             key={`answer-${questionIndex}-${index}`}
-            className={`flex items-center gap-3.5 rounded-xl border px-[22px] py-3.5 font-body text-[15px] font-light leading-6 text-starlight backdrop-blur-sm transition duration-200 animate-drift-in has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-teal ${
+            className={`flex items-center gap-3.5 rounded-xl border px-[22px] py-3.5 font-body text-[15px] font-light leading-6 text-starlight backdrop-blur-sm transition duration-200 animate-drift-in has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ember ${
               isDisabled ? "cursor-default" : "cursor-pointer"
             } ${stateCls}`}
             style={{ animationDelay: `${index * 0.06}s` }}
           >
             <input
-              onKeyDown={(e) => handleTab(e)}
+              onKeyDown={handleKeyDown}
               className={`m-0 h-2.5 w-2.5 flex-none appearance-none rounded-full outline-none transition duration-200 checked:animate-pop ${dotCls} ${
                 isDisabled ? "cursor-default" : "cursor-pointer"
               }`}
               aria-label={value}
-              id={`answer-${index}`}
+              id={`answer-${questionIndex}-${index}`}
+              name={`answers-${questionIndex}`}
               type="radio"
               value={value}
               checked={isSelected}

@@ -1,4 +1,4 @@
-# AI Trivia
+# Almanac
 
 A single-screen trivia game with a serene night-sky theme: pick a category, answer ten AI-generated questions one at a time, and watch a constellation draw itself as you go, gold for a hit, faded for a miss. Built with **Next.js 16 (App Router)**, **React 19**, **TypeScript**, and **Tailwind CSS v4**.
 
@@ -36,6 +36,6 @@ Fully keyboard-operable (Tab between answers, Enter to select), respects `prefer
 
 - `src/app/` — App Router entry (`layout.tsx`, `page.tsx`, `globals.css`)
 - `src/app/api/questions/route.ts` — AI question generation (POST `{ category }` → 10 questions)
-- `src/components/` — game UI: `Trivia` (orchestrator), `NightSky`, `Constellation`, `CategorySelect`, `CategoryIcon`, `TriviaQuestion`, `TriviaAnswers`, `TriviaButton`, `FinalScore`, `StarMedal`
+- `src/components/` — game UI: `Trivia` (orchestrator), `NightSky`, `Almanac`, `CategorySelect`, `CategoryIcon`, `TriviaQuestion`, `TriviaAnswers`, `TriviaButton`, `FinalScore`, `StarMedal`
 - `src/hooks/` — `useTrivia` (game state machine), `useScoreHistory` (best-score persistence)
 - `src/data/` — `categories.ts`, `types.ts`

@@ -16,7 +16,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Constellation · Trivia",
+  title: "Almanac · Trivia",
   description: "Answer the night sky. Every question lights a star.",
 };
 

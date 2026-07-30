@@ -3,7 +3,7 @@
 import { ChangeEvent, useCallback, useMemo, useRef } from "react";
 import { useTrivia } from "@/hooks/useTrivia";
 import NightSky from "./NightSky";
-import Constellation from "./Constellation";
+import Almanac from "./Almanac";
 import TriviaButton from "./TriviaButton";
 import FinalScore from "./FinalScore";
 import TriviaQuestion from "./TriviaQuestion";
@@ -46,7 +46,7 @@ const Trivia = () => {
   const isPlaying = phase === "playing" && questions.length > 0;
   const isLast = questions.length - 1 === questionIndex;
 
-  // Per-question results for the constellation: correct / wrong / not-yet.
+  // Per-question results for the almanac: correct / wrong / not-yet.
   const results = useMemo(
     () =>
       selection.map((s, i) =>
@@ -61,7 +61,7 @@ const Trivia = () => {
       <main className="relative z-10 mx-auto flex min-h-full w-full max-w-[860px] flex-col items-center justify-center px-6 py-11 leading-normal">
         <header className="mb-9 text-center animate-fade-in">
           <h1 className="font-display text-xl font-light uppercase tracking-[0.55em] text-starlight [text-indent:0.55em] max-[520px]:text-base max-[520px]:tracking-[0.3em] max-[520px]:[text-indent:0.3em]">
-            Constellation
+            Almanac
           </h1>
           <p className="mt-2 text-xs uppercase tracking-[0.3em] text-fog">
             Every answer lights a star
@@ -78,7 +78,7 @@ const Trivia = () => {
               <div className="relative h-[90px] w-[90px]">
                 <span className="absolute inset-[34px] rounded-full bg-stargold shadow-[0_0_24px_var(--color-stargold)]" />
                 <span className="absolute inset-0 rounded-full border border-dashed border-starlight/20 animate-orbit">
-                  <span className="absolute -top-[5px] left-1/2 h-2.5 w-2.5 rounded-full bg-teal shadow-[0_0_10px_var(--color-teal)]" />
+                  <span className="absolute -top-[5px] left-1/2 h-2.5 w-2.5 rounded-full bg-ember shadow-[0_0_10px_var(--color-ember)]" />
                 </span>
               </div>
               <p className="font-display text-xs font-light uppercase tracking-[0.34em] text-fog">
@@ -98,7 +98,7 @@ const Trivia = () => {
 
           {isPlaying && (
             <div className="flex flex-col gap-1">
-              <Constellation
+              <Almanac
                 count={questions.length}
                 results={results}
                 currentIndex={questionIndex}

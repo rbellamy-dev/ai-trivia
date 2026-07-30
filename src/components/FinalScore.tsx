@@ -47,7 +47,7 @@ const FinalScore = ({
       <p className="mt-2 max-w-[46ch] text-fog">{TOASTS[tier]}</p>
 
       <div className="mt-6">
-        <span className="font-display text-[58px] font-bold leading-none text-starlight [text-shadow:0_0_40px_rgb(110_231_216_/_0.35)] max-[720px]:text-[44px]">
+        <span className="font-display text-[58px] font-bold leading-none text-starlight [text-shadow:0_0_40px_rgb(255_179_138_/_0.35)] max-[720px]:text-[44px]">
           {score}
         </span>
         <span className="mt-1 block text-[10.5px] font-normal uppercase tracking-[0.4em] text-fog">
