@@ -1,4 +1,4 @@
-import { ChangeEvent, KeyboardEvent } from "react";
+import { ChangeEvent } from "react";
 
 const TriviaAnswers = ({
   isDisabled,
@@ -15,21 +15,19 @@ const TriviaAnswers = ({
   correctAnswers: string[];
   questionIndex: number;
 }) => {
-  // The radios share a `name`, so they behave as a native radio group: one tab
-  // stop, arrow keys move between options, Tab/Shift+Tab leave the group in the
-  // expected direction. Enter is added on top (radios only answer to Space
-  // natively) and is prevented from triggering implicit form submission.
-  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      handleAnswer(null, event.currentTarget.value);
-    }
-  };
-
+  // Buttons, not radios. A radio group is a single tab stop with arrow keys
+  // moving between options -- and moving the selection *is* a change event, so
+  // the first arrow press committed an answer and locked the question. Picking
+  // here is immediate and final, so each choice is an action, not a form value:
+  // one button per choice, every one its own tab stop, Enter/Space commits.
+  //
+  // After a pick they stay focusable (aria-disabled, not disabled) so focus is
+  // never yanked out of the group and the revealed states can still be read.
   return (
-    <form
+    <div
       key={questionIndex}
-      onSubmit={(event) => event.preventDefault()}
+      role="group"
+      aria-label="Answer choices"
       className="answers mt-4 grid grid-cols-2 gap-3 text-left max-[500px]:grid-cols-1"
     >
       {answerChoices.map((value: string, index: number) => {
@@ -43,8 +41,7 @@ const TriviaAnswers = ({
         if (isDisabled) {
           if (isCorrect) {
             stateCls = "border-correct/70 bg-correct/8";
-            dotCls =
-              "bg-correct shadow-[0_0_10px_var(--color-correct)]";
+            dotCls = "bg-correct shadow-[0_0_10px_var(--color-correct)]";
           } else if (isSelected) {
             stateCls = "border-wrong/70 bg-wrong/8";
             dotCls = "bg-wrong shadow-[0_0_10px_var(--color-wrong)]";
@@ -53,33 +50,40 @@ const TriviaAnswers = ({
           }
         }
 
+        // Spoken only after the reveal, so the outcome isn't just a colour.
+        let srState = "";
+        if (isDisabled) {
+          if (isCorrect && isSelected) srState = "Your answer, correct";
+          else if (isCorrect) srState = "Correct answer";
+          else if (isSelected) srState = "Your answer, incorrect";
+        }
+
         return (
-          <label
+          <button
             key={`answer-${questionIndex}-${index}`}
-            className={`flex items-center gap-3.5 rounded-xl border px-[22px] py-3.5 font-body text-[15px] font-light leading-6 text-starlight backdrop-blur-sm transition duration-200 animate-drift-in has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ember ${
+            type="button"
+            aria-disabled={isDisabled}
+            onClick={() => {
+              if (isDisabled) return;
+              handleAnswer(null, value);
+            }}
+            className={`flex items-center gap-3.5 rounded-xl border px-[22px] py-3.5 text-left font-body text-[15px] font-light leading-6 text-starlight backdrop-blur-sm transition duration-200 animate-drift-in focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember ${
               isDisabled ? "cursor-default" : "cursor-pointer"
             } ${stateCls}`}
             style={{ animationDelay: `${index * 0.06}s` }}
           >
-            <input
-              onKeyDown={handleKeyDown}
-              className={`m-0 h-2.5 w-2.5 flex-none appearance-none rounded-full outline-none transition duration-200 checked:animate-pop ${dotCls} ${
-                isDisabled ? "cursor-default" : "cursor-pointer"
+            <span
+              aria-hidden="true"
+              className={`m-0 h-2.5 w-2.5 flex-none rounded-full transition duration-200 ${dotCls} ${
+                isSelected ? "animate-pop" : ""
               }`}
-              aria-label={value}
-              id={`answer-${questionIndex}-${index}`}
-              name={`answers-${questionIndex}`}
-              type="radio"
-              value={value}
-              checked={isSelected}
-              onChange={(e) => handleAnswer(e)}
-              disabled={isDisabled}
             />
             <span>{value}</span>
-          </label>
+            {srState && <span className="sr-only">{srState}</span>}
+          </button>
         );
       })}
-    </form>
+    </div>
   );
 };
 
