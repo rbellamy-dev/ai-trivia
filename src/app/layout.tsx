@@ -1,30 +1,36 @@
-import type { Metadata } from "next";
-import { Unbounded, Outfit } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Anton, Atkinson_Hyperlegible } from "next/font/google";
 import "./globals.css";
 
-const unbounded = Unbounded({
+const anton = Anton({
   subsets: ["latin"],
-  weight: ["300", "500", "700"],
-  variable: "--font-unbounded",
+  weight: "400",
+  variable: "--font-anton",
   display: "swap",
 });
 
-const outfit = Outfit({
+const atkinson = Atkinson_Hyperlegible({
   subsets: ["latin"],
-  variable: "--font-outfit",
+  weight: ["400", "700"],
+  variable: "--font-atkinson",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Almanac · Trivia",
-  description: "Answer the night sky. Every question lights a star.",
+  title: "Card Table · Trivia",
+  description:
+    "Pick a deck, play your hand. Ten questions dealt one card at a time; every hit takes the trick.",
+};
+
+export const viewport: Viewport = {
+  themeColor: "#145a3a", // --color-felt (metadata cannot read CSS variables)
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${unbounded.variable} ${outfit.variable}`}>
+    <html lang="en" className={`${anton.variable} ${atkinson.variable}`}>
       <body>{children}</body>
     </html>
   );

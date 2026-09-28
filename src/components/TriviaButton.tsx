@@ -2,9 +2,10 @@ import { MouseEvent } from "react";
 
 const VARIANTS = {
   primary:
-    "border border-ember/50 bg-ember/5 text-ember hover:bg-ember/15 hover:shadow-[0_0_30px_-4px_var(--color-ember)]",
+    "border-ink bg-sun text-ink shadow-[0_3px_0_var(--color-ink)] hover:-translate-y-px hover:shadow-[0_4px_0_var(--color-ink)] active:translate-y-0.5 active:shadow-[0_1px_0_var(--color-ink)] focus-visible:outline-card",
+  ink: "border-ink bg-transparent text-ink hover:bg-ink/5 focus-visible:outline-ink",
   quiet:
-    "border border-fog/40 bg-transparent text-fog hover:text-starlight hover:border-fog",
+    "border-card/70 bg-transparent text-card hover:border-card hover:bg-card/10 focus-visible:outline-sun",
 } as const;
 
 const TriviaButton = ({
@@ -18,7 +19,8 @@ const TriviaButton = ({
 }) => {
   return (
     <button
-      className={`inline-flex cursor-pointer items-center justify-center rounded-full px-9 py-4 font-display text-xs font-light uppercase tracking-[0.34em] transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember ${VARIANTS[variant]}`}
+      type="button"
+      className={`inline-flex cursor-pointer items-center justify-center rounded-full border-2 px-[22px] py-2.5 font-display text-sm uppercase tracking-[0.08em] transition duration-150 focus-visible:outline-[3px] focus-visible:outline-offset-2 ${VARIANTS[variant]}`}
       onClick={handleButton}
     >
       {buttonText}

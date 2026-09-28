@@ -1,47 +1,50 @@
 @import "tailwindcss";
 
 /* ─────────────────────────────────────────────────────────────
-   Almanac theme — design tokens
-   Source of truth: design/variation-4-almanac.html
+   Card Table theme — design tokens
+   Source of truth: design/layout-options.html (#cardtable)
    ───────────────────────────────────────────────────────────── */
+/* Phones held sideways: too short for the stacked table, so it compacts. */
+@custom-variant short (@media (max-height: 500px) and (orientation: landscape));
+
 @theme {
   /* colors */
-  --color-night: #050810;
-  --color-deep: #0a1020;
-  --color-starlight: #e8eeff; /* text; use /3 /12 /15 /20 /25 for glass surfaces */
-  --color-fog: #aab3cd; /* dim text — clears AA (4.7:1) on glass over the deepest aurora overlap */
-  --color-ember: #ffb38a; /* the one working accent — soft peach against the red aurora */
-  --color-violet: #a78bfa;
-  --color-stargold: #ffd98e;
-  --color-correct: #7be8a2;
-  --color-wrong: #ffa8cf; /* signal rose — held 21deg off the backdrop hue so errors stay legible */
-  --color-aurora-1: #8c202a; /* strong red wash */
-  --color-aurora-2: #2a1f5e; /* indigo — kept for cosmic depth */
-  --color-aurora-3: #6e1830; /* wine red wash */
-  --color-star-silver: #c8d4f5;
-  --color-star-bronze: #d9a878;
+  --color-felt: #145a3a; /* table centre */
+  --color-felt-2: #0d432b; /* table edge (radial gradient end) */
+  --color-card: #fff8ea; /* card face; also text on felt */
+  --color-ink: #171310; /* card text, borders, drop edges */
+  --color-sun: #ffd23f; /* poker chip, primary button, verdict text on felt */
+  --color-sun-edge: #b8901a; /* chip drop edge */
+  --color-coral: #ff5c39; /* miss — fills only (played minis, wrong card) */
+  --color-coral-ink: #c93a18; /* miss, as text on cream (4.84:1, passes AA at any size) */
+  --color-mint: #1ee0a0; /* hit — fills only (played minis, correct card, reveal ring) */
+  --color-mint-ink: #0a7a52; /* hit, as text on cream (5.07:1) */
+  --color-back-1: #1e6b48; /* card back stripe */
+  --color-back-2: #17593b; /* card back stripe */
+  --color-back-edge: #0b3924; /* card back border */
+  --color-blank: #c8c0ac; /* unplayed mini-card */
 
   /* fonts — wired from next/font CSS variables in layout.tsx */
-  --font-display: var(--font-unbounded), sans-serif;
-  --font-body: var(--font-outfit), sans-serif;
+  --font-display: var(--font-anton), Impact, sans-serif;
+  --font-body: var(--font-atkinson), sans-serif;
 
   /* easing */
-  --ease-star: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-deal: cubic-bezier(0.2, 0.8, 0.2, 1);
 
   /* animations — the matching --animate-* token creates the animate-<name> utility */
-  --animate-fade-in: fade-in 0.6s var(--ease-star) both;
-  --animate-slide-up: slide-up 0.35s var(--ease-star);
-  --animate-drift-in: drift-in 0.6s var(--ease-star) both;
+  --animate-fade-in: fade-in 0.5s var(--ease-deal) both;
   /* Paint-safe entrance for first-screen content: transform only, so the text
      is contentful at frame zero (FCP/LCP can fire even if animations are
      paused, e.g. Lighthouse in a backgrounded window). */
-  --animate-rise: rise 0.6s var(--ease-star) both;
-  --animate-pop: pop 0.3s var(--ease-star);
-  --animate-aurora: aurora-move 18s var(--ease-star) infinite alternate;
-  --animate-twinkle: twinkle 3s ease-in-out infinite alternate;
-  --animate-shoot: shoot 9s linear infinite;
-  --animate-orbit: orbit-spin 3s linear infinite;
-  --animate-star-pulse: star-pulse 1.4s var(--ease-star) infinite;
+  --animate-rise: rise 0.5s var(--ease-deal) both;
+  /* A card sliding in from the draw pile (up-left) onto the table. */
+  --animate-deal: deal 0.45s var(--ease-deal) both;
+  /* A hand card rising from below the table edge. */
+  --animate-lift: lift 0.4s var(--ease-deal) both;
+  /* A rubber stamp slamming down. */
+  --animate-stamp: stamp 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-pop: pop 0.3s var(--ease-deal);
+  --animate-shuffle: shuffle 1.6s ease-in-out infinite;
 
   @keyframes fade-in {
     from {
@@ -59,7 +62,17 @@
       transform: none;
     }
   }
-  @keyframes slide-up {
+  @keyframes deal {
+    from {
+      opacity: 0;
+      transform: translate(-48px, -32px) rotate(-8deg);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes lift {
     from {
       opacity: 0;
       transform: translateY(40px);
@@ -69,14 +82,14 @@
       transform: none;
     }
   }
-  @keyframes drift-in {
+  @keyframes stamp {
     from {
       opacity: 0;
-      transform: translateY(16px);
+      transform: rotate(12deg) scale(1.6);
     }
     to {
       opacity: 1;
-      transform: none;
+      transform: rotate(12deg) scale(1);
     }
   }
   @keyframes pop {
@@ -87,51 +100,13 @@
       transform: scale(1);
     }
   }
-  @keyframes aurora-move {
-    from {
-      transform: translate(0, 0);
-    }
-    to {
-      transform: translate(4vw, 3vh);
-    }
-  }
-  @keyframes twinkle {
-    from {
-      opacity: 0.15;
-    }
-    to {
-      opacity: 0.9;
-    }
-  }
-  @keyframes shoot {
-    0%,
-    86% {
-      opacity: 0;
-      transform: translateX(0);
-    }
-    88% {
-      opacity: 1;
-    }
-    94% {
-      opacity: 0;
-      transform: translateX(60vw);
-    }
-    100% {
-      opacity: 0;
-    }
-  }
-  @keyframes orbit-spin {
-    to {
-      rotate: 360deg;
-    }
-  }
-  @keyframes star-pulse {
+  @keyframes shuffle {
     0%,
     100% {
-      opacity: 1;
+      transform: translate(0, 0) rotate(-6deg);
     }
     50% {
-      opacity: 0.35;
+      transform: translate(26px, -10px) rotate(8deg);
     }
   }
 }
@@ -151,11 +126,16 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-night);
-  color: var(--color-starlight);
+  background: var(--color-felt-2);
+  color: var(--color-card);
   font-family: var(--font-body);
-  font-weight: 350;
   overflow-x: hidden;
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  body {
+    padding: 6px 20px;
+  }
 }
 
 #__next,
@@ -164,31 +144,39 @@ body > div {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   Aurora canvas
+   Felt canvas
 
-   The red washes live on the NightSky layer (already `position: fixed`,
-   already composited) rather than on <body>. Putting them here avoids
-   `background-attachment: fixed`, which repaints badly on iOS Safari over
-   multi-stop radial gradients. Colours are mixed from the aurora tokens so
-   the backdrop and the palette can never drift apart.
+   The table lives on the FeltTable layer (`position: fixed`, composited)
+   rather than on <body>, so we never need `background-attachment: fixed`
+   (repaints badly on iOS Safari over radial gradients). A faint diagonal
+   weave and an edge vignette are mixed from the felt tokens.
    ───────────────────────────────────────────────────────────── */
-.aurora-canvas {
+.felt-canvas {
   background:
-    radial-gradient(
-      65% 50% at 20% 8%,
-      color-mix(in srgb, var(--color-aurora-1) 70%, transparent),
-      transparent 72%
+    repeating-linear-gradient(
+      45deg,
+      color-mix(in srgb, var(--color-card) 3%, transparent) 0 2px,
+      transparent 2px 7px
     ),
-    radial-gradient(
-      60% 45% at 80% 18%,
-      color-mix(in srgb, var(--color-aurora-3) 62%, transparent),
-      transparent 74%
-    ),
-    radial-gradient(
-      70% 40% at 50% 105%,
-      color-mix(in srgb, var(--color-aurora-3) 35%, transparent),
-      transparent 70%
-    );
+    radial-gradient(ellipse at 50% 30%, var(--color-felt), var(--color-felt-2) 70%);
+}
+
+.felt-vignette {
+  background: radial-gradient(
+    ellipse at 50% 45%,
+    transparent 55%,
+    color-mix(in srgb, var(--color-ink) 45%, transparent) 100%
+  );
+}
+
+/* Card back: diagonal green stripes, as on the draw pile. */
+.card-back {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--color-back-1) 0 6px,
+    var(--color-back-2) 6px 12px
+  );
+  border-color: var(--color-back-edge);
 }
 
 /* Respect users who prefer reduced motion. */

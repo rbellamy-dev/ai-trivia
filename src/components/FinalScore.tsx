@@ -1,22 +1,29 @@
 "use client";
 
 import TriviaButton from "./TriviaButton";
-import StarMedal, { type MedalTier } from "./StarMedal";
+import ScoreChip from "./ScoreChip";
+import { MiniCard } from "./CardPiles";
 import { useScoreHistory } from "@/hooks/useScoreHistory";
 
-const getTier = (pct: number): MedalTier =>
-  pct >= 90 ? "gold" : pct >= 70 ? "silver" : "bronze";
+// The score names a poker hand. Five bands, so every result reads as a real
+// hand rather than one catch-all for everything under 70%.
+const HANDS: { min: number; name: string; talk: string }[] = [
+  { min: 100, name: "Royal Flush", talk: "Every trick taken. The table is yours." },
+  { min: 80, name: "Full House", talk: "A strong hand. The house is already folding." },
+  { min: 60, name: "Straight", talk: "More hits than misses. A solid run." },
+  { min: 40, name: "Two Pair", talk: "Half the table. Another deal and you're ahead." },
+  { min: 0, name: "High Card", talk: "A rough deal. Reshuffle and go again." },
+];
 
-const TITLES: Record<MedalTier, string> = {
-  gold: "Supernova",
-  silver: "Rising Star",
-  bronze: "Stardust",
-};
+const handFor = (pct: number) => HANDS.find((h) => pct >= h.min) ?? HANDS[HANDS.length - 1];
 
-const TOASTS: Record<MedalTier, string> = {
-  gold: "The whole sky is yours tonight. Navigators will steer by this one.",
-  silver: "A bright constellation. Two more stars and it becomes legend.",
-  bronze: "Every constellation began as scattered dust. Chart another sky.",
+// useScoreHistory stores dates as M/D/YYYY; show them as "Sep 28".
+const shortDate = (mdy: string) => {
+  const [m, d, y] = mdy.split("/").map(Number);
+  const date = new Date(y, m - 1, d);
+  return Number.isNaN(date.getTime())
+    ? mdy
+    : date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
 };
 
 const FinalScore = ({
@@ -24,50 +31,72 @@ const FinalScore = ({
   onNewSubject,
   score,
   questions,
+  deck = "",
+  results = [],
 }: {
   onPlayAgain: () => void;
   onNewSubject: () => void;
   score: number;
   questions: number;
+  /** The deck just played, named on the replay button. */
+  deck?: string;
+  /** Per-question outcome, in play order. Falls back to score-first if missing. */
+  results?: (boolean | null)[];
 }) => {
-  const percentage = (score / questions) * 100;
-  const tier = getTier(percentage);
+  const hand = handFor((score / questions) * 100);
   const best = useScoreHistory(score, questions);
+
+  const played: (boolean | null)[] =
+    results.length === questions
+      ? results
+      : Array.from({ length: questions }, (_, i) => i < score);
 
   return (
     <section
       key={score}
       className="flex flex-col items-center text-center animate-fade-in"
     >
-      <StarMedal tier={tier} />
+      {/* The chip carries the score; the hand name is the headline. */}
+      <ScoreChip score={score} size="lg" label={`Chips won, out of ${questions}`} />
 
-      <h2 className="mt-2 font-display text-[36px] font-medium uppercase tracking-[0.06em] text-stargold max-[520px]:text-[28px]">
-        {TITLES[tier]}
+      <h2 className="mt-5 font-display text-[44px] uppercase leading-none tracking-[0.04em] text-sun max-sm:text-[36px]">
+        {hand.name}
       </h2>
-      <p className="mt-2 max-w-[46ch] text-fog">{TOASTS[tier]}</p>
+      <p className="mt-3 text-[11px] font-bold uppercase tracking-[0.14em] text-card/80">
+        {score} of {questions} tricks
+      </p>
+      <p className="mt-3 max-w-[42ch] text-card/80">{hand.talk}</p>
 
-      <div className="mt-6">
-        <span className="font-display text-[58px] font-bold leading-none text-starlight [text-shadow:0_0_40px_rgb(255_179_138_/_0.35)] max-[720px]:text-[44px]">
-          {score}
-        </span>
-        <span className="mt-1 block text-[10.5px] font-normal uppercase tracking-[0.4em] text-fog">
-          stars lit of {questions}
-        </span>
-      </div>
+      <ul
+        className="mt-7 flex flex-wrap justify-center gap-1"
+        aria-label={`Hands played: ${score} hits, ${questions - score} misses`}
+      >
+        {played.map((ok, i) => (
+          <li key={i} style={{ animationDelay: `${i * 0.05}s` }} className="animate-deal">
+            <MiniCard ok={ok} size="md" />
+            <span className="sr-only">
+              Hand {i + 1}: {ok ? "hit" : "miss"}
+            </span>
+          </li>
+        ))}
+      </ul>
 
-      <p className="mt-5 text-[11px] uppercase tracking-[0.3em] text-fog">
-        Brightest chart:{" "}
-        <span className="text-stargold">
-          {best.score} of {best.questions}
+      <p className="mt-6 text-[11px] font-bold uppercase tracking-[0.12em] text-card/80">
+        Best hand{" "}
+        <span className="text-sun">
+          {best.score}/{best.questions}
         </span>{" "}
-        on {best.date}
+        · {shortDate(best.date)}
       </p>
 
       <div className="mt-8 flex items-center justify-center gap-3 max-[460px]:flex-col max-[460px]:items-stretch">
-        <TriviaButton handleButton={onPlayAgain} buttonText="Play again" />
+        <TriviaButton
+          handleButton={onPlayAgain}
+          buttonText={deck ? `Deal ${deck} again` : "Deal again"}
+        />
         <TriviaButton
           handleButton={onNewSubject}
-          buttonText="New subject"
+          buttonText="Pick another deck"
           variant="quiet"
         />
       </div>
