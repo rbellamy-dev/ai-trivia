@@ -13,6 +13,10 @@ import TriviaAnswers from "./TriviaAnswers";
 import CategorySelect from "./CategorySelect";
 import { SUITS } from "./CategoryIcon";
 
+// One shared empty hand, so the keyboard effect doesn't re-run on every
+// render outside of play.
+const NO_CHOICES: string[] = [];
+
 // AI decks can take a few seconds. After a short wait the loader says so,
 // so a slow deal never looks like a hang.
 const Shuffling = () => {
@@ -102,7 +106,7 @@ const Trivia = () => {
 
   const stamp = isDisabled && currentChoice ? (isCurrentCorrect ? "hit" : "miss") : null;
   const answered = Boolean(currentChoice);
-  const choices = isPlaying ? questions[questionIndex].choices : [];
+  const choices = isPlaying ? questions[questionIndex].choices : NO_CHOICES;
 
   // Keyboard accelerators: A-D or 1-4 plays a card, Enter deals the next hand.
   useEffect(() => {

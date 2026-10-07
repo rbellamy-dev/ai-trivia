@@ -15,7 +15,12 @@ const questionSchema = z.object({
     .array(z.string())
     .length(1)
     .describe("A one-element array holding the correct choice, verbatim."),
-});
+})
+  // The prompt asks for a verbatim match, but only this check guarantees it:
+  // an answer that isn't one of the choices makes the question unwinnable.
+  .refine((q) => q.choices.includes(q.answer[0]), {
+    message: "The answer must match one of the choices exactly.",
+  });
 
 const responseSchema = z.object({
   questions: z.array(questionSchema).length(10),
