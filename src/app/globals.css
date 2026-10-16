@@ -1,50 +1,61 @@
 @import "tailwindcss";
 
 /* ─────────────────────────────────────────────────────────────
-   Card Table theme — design tokens
-   Source of truth: design/layout-options.html (#cardtable)
+   Snapshot Trivia theme: design tokens ("Museum" palette)
+   Warm parchment, espresso ink, and oxblood grease pencil. The photos carry
+   the colour; oxblood is reserved for marks (wrong picks, misses), so red
+   always means "you marked this".
+   Source of truth: DESIGN.md.
    ───────────────────────────────────────────────────────────── */
-/* Phones held sideways: too short for the stacked table, so it compacts. */
+/* Phones held sideways: too short for the stacked layout, so it compacts. */
 @custom-variant short (@media (max-height: 500px) and (orientation: landscape));
 
 @theme {
-  /* colors */
-  --color-felt: #145a3a; /* table centre */
-  --color-felt-2: #0d432b; /* table edge (radial gradient end) */
-  --color-card: #fff8ea; /* card face; also text on felt */
-  --color-ink: #171310; /* card text, borders, drop edges */
-  --color-sun: #ffd23f; /* poker chip, primary button, verdict text on felt */
-  --color-sun-edge: #b8901a; /* chip drop edge */
-  --color-coral: #ff5c39; /* miss — fills only (played minis, wrong card) */
-  --color-coral-ink: #c93a18; /* miss, as text on cream (4.84:1, passes AA at any size) */
-  --color-mint: #1ee0a0; /* hit — fills only (played minis, correct card, reveal ring) */
-  --color-mint-ink: #0a7a52; /* hit, as text on cream (5.07:1) */
-  --color-back-1: #1e6b48; /* card back stripe */
-  --color-back-2: #17593b; /* card back stripe */
-  --color-back-edge: #0b3924; /* card back border */
-  --color-blank: #c8c0ac; /* unplayed mini-card */
+  /* colors — every text pairing is ≥ 4.5:1 (AA) */
+  --color-table: #f3efe7; /* the table, warm parchment */
+  --color-table-glow: #fbf8f2; /* backlight hot spot */
+  --color-table-edge: #e9e3d7; /* table falloff */
+  --color-ink: #1f1b16; /* espresso: text, primary buttons (14.9:1 on table) */
+  --color-muted: #655d52; /* labels (5.7:1 on table, 4.8:1 on strip) */
+  --color-line: #d6cdbd; /* hairlines on settled, non-interactive surfaces */
+  --color-edge: #8f8371; /* borders on controls you can click (3.2:1 on table, 3.7:1 on card) */
+  --color-card: #fffdf8; /* answer cards, popover, quiet buttons */
+  --color-pencil: #8c2f23; /* oxblood grease pencil — marks and graphics */
+  --color-pencil-text: #8c2f23; /* oxblood as text (7.2:1 on table, 8.1:1 on card) */
+  --color-hit: #2f6a3c; /* correct, as text and marks (6.4:1 on card) */
+  --color-print: #fffcf5; /* photo paper border */
+  --color-strip: #e5ddcf; /* filmstrip base */
+  --color-empty: #d9cfbe; /* undeveloped frame */
+  --color-empty-text: #5b5246; /* frame numbers on empty frames (5.0:1) */
+  --color-empty-2: #e3dacb; /* the lighter stripe of the hatch */
+  --color-focus: #2d5bff; /* focus rings (4.5:1 on table) */
+
+  /* shadows — tinted with ink, never neutral grey, so they sit warm on paper */
+  --shadow-print: 0 1px 0 rgb(31 27 22 / 0.04), 0 18px 30px -18px rgb(31 27 22 / 0.42);
+  --shadow-card: 0 1px 0 rgb(31 27 22 / 0.04), 0 14px 24px -16px rgb(31 27 22 / 0.45);
+  --shadow-thumb: 0 8px 14px -10px rgb(31 27 22 / 0.45);
+  --shadow-popover: 0 20px 40px -20px rgb(31 27 22 / 0.35);
 
   /* fonts — wired from next/font CSS variables in layout.tsx */
-  --font-display: var(--font-anton), Impact, sans-serif;
-  --font-body: var(--font-atkinson), sans-serif;
+  --font-sans: var(--font-plex-sans), system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+  --font-hand: var(--font-marker), cursive;
 
   /* easing */
-  --ease-deal: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-develop: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-pencil: cubic-bezier(0.6, 0.05, 0.35, 1);
 
   /* animations — the matching --animate-* token creates the animate-<name> utility */
-  --animate-fade-in: fade-in 0.5s var(--ease-deal) both;
+  --animate-fade-in: fade-in 0.5s var(--ease-develop) both;
   /* Paint-safe entrance for first-screen content: transform only, so the text
-     is contentful at frame zero (FCP/LCP can fire even if animations are
-     paused, e.g. Lighthouse in a backgrounded window). */
-  --animate-rise: rise 0.5s var(--ease-deal) both;
-  /* A card sliding in from the draw pile (up-left) onto the table. */
-  --animate-deal: deal 0.45s var(--ease-deal) both;
-  /* A hand card rising from below the table edge. */
-  --animate-lift: lift 0.4s var(--ease-deal) both;
-  /* A rubber stamp slamming down. */
-  --animate-stamp: stamp 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
-  --animate-pop: pop 0.3s var(--ease-deal);
-  --animate-shuffle: shuffle 1.6s ease-in-out infinite;
+     is contentful at frame zero. */
+  --animate-rise: rise 0.5s var(--ease-develop) both;
+  /* A print arriving from the developer tray. */
+  --animate-develop: develop 0.9s var(--ease-develop) both;
+  /* The kept count ticking up. */
+  --animate-bump: bump 0.35s ease;
+  /* Undeveloped frames breathing while their image generates. */
+  --animate-pulse-soft: pulse-soft 1.6s ease-in-out infinite;
 
   @keyframes fade-in {
     from {
@@ -62,51 +73,24 @@
       transform: none;
     }
   }
-  @keyframes deal {
+  @keyframes develop {
     from {
       opacity: 0;
-      transform: translate(-48px, -32px) rotate(-8deg);
+      filter: blur(8px) grayscale(1);
     }
     to {
       opacity: 1;
-      transform: none;
+      filter: none;
     }
   }
-  @keyframes lift {
-    from {
-      opacity: 0;
-      transform: translateY(40px);
-    }
-    to {
-      opacity: 1;
-      transform: none;
+  @keyframes bump {
+    40% {
+      transform: translateY(-3px) scale(1.15);
     }
   }
-  @keyframes stamp {
-    from {
-      opacity: 0;
-      transform: rotate(12deg) scale(1.6);
-    }
-    to {
-      opacity: 1;
-      transform: rotate(12deg) scale(1);
-    }
-  }
-  @keyframes pop {
-    0% {
-      transform: scale(1.3);
-    }
-    100% {
-      transform: scale(1);
-    }
-  }
-  @keyframes shuffle {
-    0%,
-    100% {
-      transform: translate(0, 0) rotate(-6deg);
-    }
+  @keyframes pulse-soft {
     50% {
-      transform: translate(26px, -10px) rotate(8deg);
+      opacity: 0.55;
     }
   }
 }
@@ -114,72 +98,116 @@
 /* ─────────────────────────────────────────────────────────────
    Base
    ───────────────────────────────────────────────────────────── */
+/* The table: a soft backlit hot spot falling off to the edges. It's sized to
+   the whole page (html grows with its content), painted once, so a page
+   taller than the window never shows a band of a different colour. */
 html {
-  height: 100%;
+  min-height: 100%;
+  background: radial-gradient(
+      ellipse at 40% 35%,
+      var(--color-table-glow) 0%,
+      var(--color-table) 55%,
+      var(--color-table-edge) 100%
+    )
+    no-repeat var(--color-table-edge);
+  background-size: 100% 100%;
 }
 
 body {
-  min-height: 100vh;
+  min-height: 100dvh;
   margin: 0;
-  padding: 20px;
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--color-felt-2);
-  color: var(--color-card);
-  font-family: var(--font-body);
-  overflow-x: hidden;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  /* Guards against the few px a rotated print can poke past a narrow
+     viewport. clip (not hidden) doesn't create a scroll container. */
+  overflow-x: clip;
 }
 
-@media (max-height: 500px) and (orientation: landscape) {
-  body {
-    padding: 6px 20px;
-  }
-}
-
-#__next,
-body > div {
-  height: 100%;
+:where(button, [tabindex], a):focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
 }
 
 /* ─────────────────────────────────────────────────────────────
-   Felt canvas
-
-   The table lives on the FeltTable layer (`position: fixed`, composited)
-   rather than on <body>, so we never need `background-attachment: fixed`
-   (repaints badly on iOS Safari over radial gradients). A faint diagonal
-   weave and an edge vignette are mixed from the felt tokens.
+   Grease-pencil marks
+   Every mark is an SVG shape with pathLength="1", so one dash trick draws
+   any of them: dasharray 1, dashoffset 1 → 0.
    ───────────────────────────────────────────────────────────── */
-.felt-canvas {
-  background:
-    repeating-linear-gradient(
-      45deg,
-      color-mix(in srgb, var(--color-card) 3%, transparent) 0 2px,
-      transparent 2px 7px
-    ),
-    radial-gradient(ellipse at 50% 30%, var(--color-felt), var(--color-felt-2) 70%);
+.mark :is(path, ellipse, line) {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw var(--draw-duration, 0.45s) var(--ease-pencil) var(--draw-delay, 0s) forwards;
+}
+.mark-static :is(path, ellipse, line) {
+  animation: none;
+  stroke-dashoffset: 0;
+}
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
-.felt-vignette {
-  background: radial-gradient(
-    ellipse at 50% 45%,
-    transparent 55%,
-    color-mix(in srgb, var(--color-ink) 45%, transparent) 100%
-  );
-}
-
-/* Card back: diagonal green stripes, as on the draw pile. */
-.card-back {
+/* Undeveloped frame / print: diagonal hatching. */
+.hatched {
   background: repeating-linear-gradient(
-    45deg,
-    var(--color-back-1) 0 6px,
-    var(--color-back-2) 6px 12px
+    -45deg,
+    var(--color-empty) 0 6px,
+    var(--color-empty-2) 6px 12px
   );
-  border-color: var(--color-back-edge);
 }
 
-/* Respect users who prefer reduced motion. */
+/* Filmstrip sprocket holes, top and bottom. */
+.sprockets::before,
+.sprockets::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0 10px,
+    var(--color-table) 10px 20px
+  );
+}
+.sprockets::before {
+  top: 3px;
+}
+.sprockets::after {
+  bottom: 3px;
+}
+
+/* Resuming a saved round: stay blank for the moment before it's restored. */
+html[data-resuming] main {
+  visibility: hidden;
+}
+
+/* Settings popover: native [popover] gives light-dismiss and Escape. */
+.options-popover {
+  position: fixed;
+  inset: auto;
+  top: 64px;
+  right: 16px;
+  margin: 0;
+}
+/* On phones the top bar can wrap to two lines, so the panel docks to the
+   bottom of the screen instead, within thumb reach. */
+@media (max-width: 639px) {
+  .options-popover {
+    top: auto;
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+    width: auto;
+  }
+}
+
+/* Respect users who prefer reduced motion. Marks still end fully drawn
+   (fill-mode forwards), they just don't animate. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

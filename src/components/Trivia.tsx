@@ -1,76 +1,64 @@
 "use client";
 
-import { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
-import { useTrivia } from "@/hooks/useTrivia";
-import { categories, topicFor } from "@/data/categories";
-import FeltTable from "./FeltTable";
-import { DrawPile, PlayedPile, ProgressStrip } from "./CardPiles";
-import ScoreChip from "./ScoreChip";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { ROLL_SIZE, useTrivia, type State } from "@/hooks/useTrivia";
+import { useSettings } from "@/hooks/useSettings";
+import { useRollImages } from "@/hooks/useRollImages";
+import { topicFor } from "@/data/categories";
+import type { Question } from "@/data/types";
+import TopBar from "./TopBar";
+import FilmStrip from "./FilmStrip";
+import Frame from "./Frame";
 import TriviaButton from "./TriviaButton";
 import FinalScore from "./FinalScore";
-import TriviaQuestion from "./TriviaQuestion";
-import TriviaAnswers from "./TriviaAnswers";
 import CategorySelect from "./CategorySelect";
-import { SUITS } from "./CategoryIcon";
 
-// One shared empty hand, so the keyboard effect doesn't re-run on every
-// render outside of play.
-const NO_CHOICES: string[] = [];
+// One shared empty roll, so image loading doesn't re-run outside of play.
+const NO_QUESTIONS: Question[] = [];
 
-// AI decks can take a few seconds. After a short wait the loader says so,
-// so a slow deal never looks like a hang.
-const Shuffling = () => {
+// The round in progress, kept for this tab so a refresh resumes it.
+const SAVE_KEY = "snapshot-round";
+
+// Questions stream in, so this only covers writing the first one. It says
+// how long that takes, says so again if it runs long, and offers a way out.
+const LoadingRoll = ({ category, onCancel }: { category: string; onCancel: () => void }) => {
   const [slow, setSlow] = useState(false);
   useEffect(() => {
-    const t = setTimeout(() => setSlow(true), 5000);
+    const t = setTimeout(() => setSlow(true), 8000);
     return () => clearTimeout(t);
   }, []);
   return (
-    <div
-      role="status"
-      className="flex flex-col items-center justify-center gap-8 py-16 text-center animate-fade-in"
-    >
-      <div aria-hidden="true" className="relative h-[98px] w-[96px]">
-        {[0, 1, 2].map((i) => (
+    <div className="mx-auto flex w-full max-w-[720px] flex-col items-center gap-8 px-6 py-16 text-center animate-fade-in">
+      <div aria-hidden="true" className="sprockets relative grid w-full grid-cols-10 gap-2 bg-strip px-6 py-4">
+        {Array.from({ length: 10 }, (_, i) => (
           <span
             key={i}
-            className="card-back absolute inset-x-3 inset-y-0 rounded-lg border-[1.5px] shadow-[0_2px_0_rgb(23_19_16/0.4)] animate-shuffle"
-            style={{ animationDelay: `${i * -0.53}s` }}
+            className="hatched aspect-[4/3] animate-pulse-soft"
+            style={{ animationDelay: `${i * 0.12}s` }}
           />
         ))}
       </div>
-      <div>
-        <p className="font-display text-sm uppercase tracking-[0.14em] text-sun">
-          Shuffling the deck…
+      <div role="status">
+        <p className="text-[1.0625rem] font-medium text-ink">
+          Writing your first {category ? `${category} ` : ""}question…
         </p>
-        <p className={`mt-2 text-sm text-card/80 ${slow ? "animate-rise" : "invisible"}`}>
-          Fresh questions take a few seconds to write.
+        <p className="mt-1.5 text-[0.9375rem] text-muted">
+          {slow ? "Still writing. Almost there." : "This usually takes a few seconds."}
         </p>
       </div>
+      <TriviaButton handleButton={onCancel} buttonText="Choose another topic" variant="quiet" />
     </div>
   );
 };
 
 const Trivia = () => {
-  const { state, selectCategory, answer, next, reset, isCurrentCorrect } =
-    useTrivia();
-  const {
-    phase,
-    questions,
-    questionIndex,
-    score,
-    selection,
-    showMessage,
-    isDisabled,
-  } = state;
+  const { state, selectCategory, answer, next, reset, restore, isCurrentCorrect } = useTrivia();
+  const { phase, questions, questionIndex, score, selection, showMessage, isDisabled, streaming, waiting } =
+    state;
+  const [settings, updateSettings] = useSettings();
 
-  const handleAnswer = (event: ChangeEvent | null, val?: string) => {
-    const choice = (event?.target as HTMLInputElement)?.value || val || "";
-    answer(choice);
-  };
-
-  // Remember the picked deck so the top bar can name it and the finale can
-  // reshuffle it directly.
+  // Remember the picked roll so the top bar can name it and the contact sheet
+  // can replay it directly.
   const [category, setCategory] = useState("");
   const handleSelectCategory = useCallback(
     (name: string) => {
@@ -83,202 +71,164 @@ const Trivia = () => {
     () => selectCategory(topicFor(category)),
     [selectCategory, category]
   );
-  const suit = SUITS[categories.find((c) => c.name === category)?.icon ?? "note"];
 
-  const currentChoice = selection[questionIndex]?.choice ?? "";
+  // Resume a round after a refresh. This reads browser storage, which the
+  // server render can't, so it has to happen after mount.
+  useEffect(() => {
+    try {
+      const saved = JSON.parse(sessionStorage.getItem(SAVE_KEY) || "null") as {
+        state?: State;
+        category?: string;
+      } | null;
+      if (saved?.state?.phase === "playing" && saved.state.questions?.length) {
+        restore(saved.state);
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- syncing from browser storage on mount
+        setCategory(saved.category ?? "");
+      }
+    } catch {
+      // Storage blocked or corrupt: start fresh.
+    } finally {
+      delete document.documentElement.dataset.resuming;
+    }
+  }, [restore]);
+
+  // Keep the saved round current; drop it once the round ends or is left.
+  useEffect(() => {
+    try {
+      if (phase === "playing") sessionStorage.setItem(SAVE_KEY, JSON.stringify({ state, category }));
+      else if (phase !== "loading") sessionStorage.removeItem(SAVE_KEY);
+    } catch {
+      // Storage blocked: the round just won't survive a refresh.
+    }
+  }, [state, category, phase]);
+
   const isPlaying = phase === "playing" && questions.length > 0;
-  const isLast = questions.length - 1 === questionIndex;
+  const hasRoll = (phase === "playing" || phase === "gameover") && questions.length > 0;
+  const images = useRollImages(hasRoll ? questions : NO_QUESTIONS);
+  const currentChoice = selection[questionIndex]?.choice ?? "";
+  // While questions are still streaming in, the roll's length isn't final.
+  const isLast = !streaming && questions.length - 1 === questionIndex;
+  const total = streaming ? Math.max(ROLL_SIZE, questions.length) : questions.length;
+  // No photos at all (shouldn't happen with the local library): say so once.
+  const noPhotos = isPlaying && questions.every((q) => !q.photo);
 
-  // Per-question results for the piles: hit / miss / not-yet.
+  // Per-question results for the strip: correct / incorrect / not yet.
   const results = useMemo(
     () =>
       selection.map((s, i) =>
-        s.choice ? questions[i]?.answer.includes(s.choice) ?? false : null
+        s.choice ? (questions[i]?.answer.includes(s.choice) ?? false) : null
       ),
     [selection, questions]
   );
 
-  // The reducer clears the selection when the last hand is played, so keep a
-  // copy of the play-order results for the finale's row of played cards.
+  // The reducer clears the selection when the last question is played, so
+  // keep a copy of the answers for the contact sheet.
   // (Adjusted during render rather than in an effect, per React's guidance.)
-  const [played, setPlayed] = useState(results);
-  if (phase === "playing" && played !== results) setPlayed(results);
-
-  const stamp = isDisabled && currentChoice ? (isCurrentCorrect ? "hit" : "miss") : null;
-  const answered = Boolean(currentChoice);
-  const choices = isPlaying ? questions[questionIndex].choices : NO_CHOICES;
-
-  // Keyboard accelerators: A-D or 1-4 plays a card, Enter deals the next hand.
-  useEffect(() => {
-    if (!isPlaying) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.metaKey || e.ctrlKey || e.altKey) return;
-      const target = e.target as HTMLElement;
-      if (!answered) {
-        const i = "abcd".indexOf(e.key.toLowerCase());
-        const n = "1234".indexOf(e.key);
-        const pick = i >= 0 ? i : n;
-        if (pick >= 0 && choices[pick]) {
-          e.preventDefault();
-          answer(choices[pick]);
-        }
-        return;
-      }
-      // A focused live button already handles Enter itself; don't deal twice.
-      const liveButton =
-        target.tagName === "BUTTON" && target.getAttribute("aria-disabled") !== "true";
-      if (e.key === "Enter" && !liveButton) {
-        e.preventDefault();
-        next();
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [isPlaying, answered, choices, answer, next]);
+  const [played, setPlayed] = useState(selection);
+  if (phase === "playing" && played !== selection) setPlayed(selection);
 
   return (
-    <>
-      <FeltTable />
-      <main className="relative z-10 mx-auto flex min-h-full w-full max-w-[860px] flex-col items-center justify-center py-6 leading-normal short:py-1">
-        {isPlaying && <h1 className="sr-only">Card Table</h1>}
-        {!isPlaying && (
-          <header className="mb-9 text-center animate-rise">
-            <h1 className="font-display text-lg uppercase tracking-[0.3em] text-sun [text-indent:0.3em]">
-              Card Table
-            </h1>
-            <p className="mt-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-card/80">
-              Ten hands · one chip per trick
-            </p>
-          </header>
-        )}
+    <main
+      className={`min-h-dvh leading-normal ${
+        isPlaying
+          ? "grid grid-rows-[auto_auto_1fr] [grid-template-areas:'top'_'strip'_'frame'] md:grid-rows-[auto_1fr_auto] md:[grid-template-areas:'top'_'frame'_'strip']"
+          : `flex flex-col items-center justify-center pt-10 ${phase === "gameover" ? "" : "pb-10"}`
+      }`}
+    >
+      {phase !== "select" && <h1 className="sr-only">Snapshot Trivia</h1>}
 
-        <section className="w-full">
-          {phase === "select" && (
-            <CategorySelect onSelect={handleSelectCategory} />
-          )}
+      {phase === "select" && (
+        <div className="w-full px-6 max-sm:px-4">
+          <h1 className="mb-10 flex items-center justify-center gap-2 text-[1.375rem] font-semibold tracking-[-0.01em]">
+            Snapshot
+            <span className="font-normal text-muted">Trivia</span>
+            <span aria-hidden="true" className="size-3 rounded-full bg-pencil" />
+          </h1>
+          <CategorySelect onSelect={handleSelectCategory} />
+        </div>
+      )}
 
-          {phase === "loading" && <Shuffling />}
+      {phase === "loading" && <LoadingRoll category={category} onCancel={reset} />}
 
-          {phase === "error" && (
-            <div className="mx-auto flex max-w-[440px] flex-col items-center gap-5 rounded-[14px] border-2 border-ink bg-card px-6 py-8 text-center text-ink shadow-[0_6px_0_rgb(23_19_16/0.35)] animate-deal">
-              <p className="font-display text-[28px] uppercase tracking-[0.04em] text-coral-ink">
-                Misdeal
-              </p>
-              {/* The server's message is for developers (it can name a missing
-                  API key), so players get table talk and two ways forward. */}
-              <p role="alert" className="max-w-md">
-                The dealer dropped the {category || "deck"} deck. Check your
-                connection and deal again, or pick another deck.
-              </p>
-              <div className="flex flex-wrap justify-center gap-3">
-                <TriviaButton handleButton={playAgain} buttonText="Deal again" />
-                <TriviaButton
-                  handleButton={reset}
-                  buttonText="Pick another deck"
-                  variant="ink"
-                />
-              </div>
-            </div>
-          )}
+      {phase === "error" && (
+        <div className="mx-auto flex max-w-[460px] flex-col items-center gap-5 bg-print px-8 py-10 text-center shadow-print animate-rise">
+          <p className="font-hand text-[1.875rem] leading-tight text-pencil-text">
+            This round didn&apos;t develop
+          </p>
+          {/* The server's message is for developers (it can name a missing
+              API key), so players get plain language and two ways forward. */}
+          <p role="alert" className="max-w-md text-[1rem] text-muted">
+            Something went wrong while writing the {category ? `${category} ` : ""}questions.
+            Try again, or choose another topic.
+          </p>
+          <div className="flex flex-wrap justify-center gap-3">
+            <TriviaButton handleButton={playAgain} buttonText="Try again" />
+            <TriviaButton handleButton={reset} buttonText="Choose another topic" variant="quiet" />
+          </div>
+        </div>
+      )}
 
-          {isPlaying && (
-            <div className="grid grid-cols-[minmax(0,1fr)] grid-rows-[auto_1fr_auto]">
-              {/* top bar */}
-              <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 px-5 py-3.5 short:py-1 text-xs font-bold uppercase tracking-[0.1em] text-card max-sm:px-2">
-                <span>
-                  {category} · Hand {questionIndex + 1} of {questions.length}
-                </span>
-                <span className="ml-auto flex items-center gap-3">
-                  <button
-                    type="button"
-                    onClick={reset}
-                    className="min-h-11 cursor-pointer rounded-full px-3 font-bold uppercase tracking-[0.1em] text-card/80 underline-offset-4 transition-colors hover:text-card hover:underline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-sun"
-                  >
-                    Fold
-                  </button>
-                  <ScoreChip score={score} />
-                </span>
-              </div>
-
-              {/* the table: draw pile | question card | played pile.
-                  On phones and short screens the piles fold into a slim
-                  progress strip under the question. */}
-              <div className="grid grid-cols-[110px_minmax(0,1fr)_110px] items-center gap-3 px-5 pt-1.5 pb-8 max-sm:grid-cols-1 max-sm:gap-y-4 max-sm:px-2 max-sm:pb-2 short:grid-cols-1 short:gap-y-2 short:pb-1">
-                <DrawPile remaining={questions.length - questionIndex - 1} />
-                <div className="min-w-0">
-                <TriviaQuestion
-                  currentQuestion={questions[questionIndex].question}
-                  questionIndex={questionIndex + 1}
-                  questions={questions.length}
-                  score={score}
-                  category={category}
-                  suit={suit.glyph}
-                  suitRed={suit.red}
-                  stamp={stamp}
-                />
-                </div>
-                <PlayedPile results={results} />
-                <ProgressStrip results={results} current={questionIndex} />
-              </div>
-
-              {/* the hand */}
-              <div className="relative px-5 pt-6 pb-5 max-sm:px-2 max-sm:pt-2 short:pt-2 short:pb-1">
-                <p
-                  aria-live="polite"
-                  className="min-h-[18px] text-center font-display text-sm uppercase tracking-[0.14em] text-sun"
-                >
-                  {showMessage && (
-                    <span key={currentChoice} className="inline-block animate-rise">
-                      {!currentChoice
-                        ? "Play a card first."
-                        : isCurrentCorrect
-                        ? "Hit. Take the trick."
-                        : "Miss. The ringed card was the play."}
-                    </span>
-                  )}
-                </p>
-
-                <TriviaAnswers
-                  handleAnswer={handleAnswer}
-                  isDisabled={isDisabled}
-                  currentAnswer={currentChoice}
-                  answerChoices={questions[questionIndex].choices}
-                  correctAnswers={questions[questionIndex].answer}
-                  questionIndex={questionIndex}
-                  suit={suit.glyph}
-                  suitRed={suit.red}
-                />
-
-                {/* Deal next only appears once a card is played, so it can't be
-                    pressed by mistake. It keeps its space to avoid a jump. */}
-                <div className="mt-3 flex items-center justify-between gap-4 max-sm:mt-4 short:absolute short:-top-1 short:right-0 short:mt-0!">
-                  <p className="text-xs text-card/80 max-sm:hidden short:hidden">
-                    Keys: A–D to play, Enter to deal
-                  </p>
-                  <div className={`ml-auto ${answered ? "animate-rise" : "invisible"}`}>
-                    <TriviaButton
-                      handleButton={next}
-                      buttonText={isLast ? "Show my hand" : "Deal next"}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {phase === "gameover" && (
-            <FinalScore
-              questions={questions.length}
-              score={score}
-              results={played}
-              deck={category}
-              onPlayAgain={playAgain}
-              onNewSubject={reset}
+      {isPlaying && (
+        <>
+          <div className="[grid-area:top]">
+            <TopBar
+              category={category}
+              question={questionIndex + 1}
+              total={total}
+              correct={score}
+              settings={settings}
+              onSettings={updateSettings}
+              onLeave={reset}
             />
-          )}
-        </section>
-      </main>
-    </>
+            {noPhotos && (
+              <p role="status" className="px-6 text-[0.875rem] text-muted max-sm:px-4">
+                Photos are unavailable right now, so this round plays with captions.
+              </p>
+            )}
+          </div>
+          <div className="self-center [grid-area:frame]">
+            <div className="mx-auto w-full max-w-[1120px]">
+              <Frame
+                key={questions[questionIndex].id}
+                question={questions[questionIndex]}
+                index={questionIndex}
+                image={images[questionIndex]}
+                settings={settings}
+                isDisabled={isDisabled}
+                showMessage={showMessage}
+                currentChoice={currentChoice}
+                isCorrect={isCurrentCorrect}
+                isLast={isLast}
+                waiting={waiting}
+                onAnswer={answer}
+                onNext={next}
+              />
+            </div>
+          </div>
+          <div className="[grid-area:strip]">
+            <FilmStrip
+              questions={questions}
+              images={images}
+              results={results}
+              current={questionIndex}
+              total={total}
+            />
+          </div>
+        </>
+      )}
+
+      {phase === "gameover" && (
+        <FinalScore
+          questions={questions}
+          images={images}
+          score={score}
+          choices={played.map((s) => s.choice)}
+          deck={category}
+          onPlayAgain={playAgain}
+          onNewSubject={reset}
+        />
+      )}
+    </main>
   );
 };
 

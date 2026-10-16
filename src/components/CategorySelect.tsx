@@ -1,76 +1,82 @@
-import { categories } from "@/data/categories";
-import CategoryIcon, { SUITS } from "./CategoryIcon";
+"use client";
 
-// Five decks fanned face-up: four suits and the Joker. Straightened into a
-// grid on phones, where the Joker spans the full width underneath.
-const FAN = [
-  "rotate-[-16deg] translate-y-2",
-  "rotate-[-8deg]",
-  "rotate-0 -translate-y-1.5",
-  "rotate-[8deg]",
-  "rotate-[16deg] translate-y-2",
-];
+import Image, { type StaticImageData } from "next/image";
+import { categories } from "@/data/categories";
+import { useBestByRoll } from "@/hooks/useScoreHistory";
+// Roll covers generated once with Nano Banana 2 (see DESIGN.md §7).
+import science from "@/assets/rolls/science.jpg";
+import history from "@/assets/rolls/history.jpg";
+import geography from "@/assets/rolls/geography.jpg";
+import biology from "@/assets/rolls/biology.jpg";
+
+// Each roll's cover print.
+const COVERS: Record<string, StaticImageData> = { science, history, geography, biology };
+
+// Four rolls laid on the light table, each a small print. On phones they
+// form a 2×2 grid.
+const TILT = ["-rotate-2", "rotate-1", "-rotate-1", "rotate-2"];
 
 const CategorySelect = ({
   onSelect,
 }: {
   onSelect: (category: string) => void;
 }) => {
+  const bestByRoll = useBestByRoll();
   // animate-rise, not fade-in: this section holds the LCP heading, so it must
   // be contentful at frame zero (transform-only entrance).
   return (
-    <section className="flex flex-col text-center animate-rise">
-      <h2 className="m-0 font-display text-[34px] uppercase leading-tight tracking-[0.06em] text-card max-sm:text-[28px]">
-        Pick a deck
+    <section className="flex flex-col items-center text-center animate-rise">
+      <h2 className="text-[2.25rem] font-semibold leading-tight tracking-[-0.02em] md:text-[3rem]">
+        Pick a topic
       </h2>
-      <p className="mx-auto mt-3 max-w-[42ch] text-card/80">
-        Ten hands, one deck. Every hit takes the trick and a chip goes on the
-        table. Feeling lucky? Play the Joker.
+      <p className="mt-3 max-w-[46ch] text-[1.0625rem] leading-relaxed text-muted">
+        Ten questions, each with its own photo. See every photo marked right
+        or wrong at the end.
       </p>
 
-      <div className="mt-10 flex items-end justify-center px-4 pb-3 max-sm:grid max-sm:grid-cols-2 max-sm:gap-3 max-sm:px-0">
+      <ul className="mt-10 grid w-full max-w-[760px] grid-cols-4 gap-5 max-md:grid-cols-2">
         {categories.map((category, i) => {
-          const suit = SUITS[category.icon];
-          const joker = category.icon === "joker";
+          const cover = COVERS[category.id];
+          const best = bestByRoll[category.name];
           return (
-            <button
-              key={category.id}
-              type="button"
-              onClick={() => onSelect(category.name)}
-              style={{ animationDelay: `${0.05 + i * 0.08}s` }}
-              className={`relative -mx-2.5 flex aspect-[5/7] w-[clamp(112px,17vw,150px)] origin-[50%_130%] cursor-pointer flex-col justify-between rounded-xl border-2 p-3 text-left shadow-[0_4px_0_rgb(23_19_16/0.35)] transition-transform duration-200 animate-lift hover:z-10 hover:rotate-0 hover:-translate-y-4 focus-visible:z-10 focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-sun max-sm:mx-0 max-sm:w-auto max-sm:rotate-0 max-sm:translate-y-0 max-sm:hover:translate-y-0 ${
-                joker
-                  ? "border-sun bg-ink text-sun max-sm:col-span-2 max-sm:aspect-auto max-sm:flex-row max-sm:items-center max-sm:justify-start max-sm:gap-4 max-sm:py-4"
-                  : "border-ink bg-card text-ink"
-              } ${FAN[i]}`}
-              aria-label={
-                joker
-                  ? "Joker, a mixed deck from every topic"
-                  : `${category.name}, ${suit.name}`
-              }
-            >
-              <CategoryIcon
-                name={category.icon}
-                className={`text-[26px] leading-none ${joker ? "max-sm:hidden" : ""}`}
-              />
-              <CategoryIcon
-                name={category.icon}
-                className={`self-center text-[64px] leading-none max-sm:text-[52px] ${
-                  joker ? "max-sm:self-auto max-sm:text-[40px]" : ""
-                }`}
-              />
-              <span>
-                <span className="block font-display text-[13px] uppercase leading-tight tracking-[0.04em]">
+            <li key={category.id}>
+              <button
+                type="button"
+                onClick={() => onSelect(category.name)}
+                style={{ animationDelay: `${0.05 + i * 0.07}s` }}
+                className={`group flex h-full w-full cursor-pointer flex-col bg-print p-2.5 pb-4 text-left shadow-card transition-transform duration-200 animate-rise hover:-translate-y-1 hover:rotate-0 max-md:rotate-0 ${TILT[i]}`}
+              >
+                <span aria-hidden="true" className="relative block aspect-[4/3] w-full overflow-hidden bg-empty">
+                  {cover && (
+                    <Image
+                      src={cover}
+                      alt=""
+                      fill
+                      placeholder="blur"
+                      // Above the fold on the first screen: load right away.
+                      priority
+                      sizes="(max-width: 768px) 48vw, 180px"
+                      className="object-cover transition-transform duration-300 ease-out group-hover:scale-105"
+                    />
+                  )}
+                </span>
+                <span className="mt-3 block px-1 text-[1rem] font-medium leading-tight">
                   {category.name}
                 </span>
-                <span className="mt-1 block text-[11px] font-bold uppercase tracking-[0.2em] opacity-80">
-                  {joker ? "Mixed deck" : "10 hands"}
+                {/* Your best on this roll, once you've played it. The line
+                    keeps its height so the cards stay aligned. */}
+                <span className="mt-1 block min-h-[1.25rem] px-1 text-[0.8125rem] text-muted">
+                  {best && (
+                    <>
+                      Best <span className="font-mono text-ink tabular-nums">{best.score}/{best.questions}</span>
+                    </>
+                  )}
                 </span>
-              </span>
-            </button>
+              </button>
+            </li>
           );
         })}
-      </div>
+      </ul>
     </section>
   );
 };

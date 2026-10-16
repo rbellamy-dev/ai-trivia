@@ -1,36 +1,59 @@
 import type { Metadata, Viewport } from "next";
-import { Anton, Atkinson_Hyperlegible } from "next/font/google";
+import { IBM_Plex_Mono, IBM_Plex_Sans, Permanent_Marker } from "next/font/google";
 import "./globals.css";
 
-const anton = Anton({
+// One superfamily: Plex Sans for everything you read, Plex Mono for
+// film-edge data (question numbers).
+const plexSans = IBM_Plex_Sans({
   subsets: ["latin"],
-  weight: "400",
-  variable: "--font-anton",
+  weight: ["400", "500", "600"],
+  variable: "--font-plex-sans",
   display: "swap",
 });
 
-const atkinson = Atkinson_Hyperlegible({
+const plexMono = IBM_Plex_Mono({
   subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-atkinson",
+  weight: ["400", "500"],
+  variable: "--font-plex-mono",
+  display: "swap",
+});
+
+const marker = Permanent_Marker({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-marker",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Card Table · Trivia",
+  title: "Snapshot Trivia",
   description:
-    "Pick a deck, play your hand. Ten questions dealt one card at a time; every hit takes the trick.",
+    "A photo trivia game. Pick a topic and answer ten fresh questions, each with its own photo, then see how you did on a contact sheet.",
 };
 
 export const viewport: Viewport = {
-  themeColor: "#145a3a", // --color-felt (metadata cannot read CSS variables)
+  themeColor: "#f3efe7", // --color-table (metadata cannot read CSS variables)
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${anton.variable} ${atkinson.variable}`}>
+    <html
+      lang="en"
+      className={`${plexSans.variable} ${plexMono.variable} ${marker.variable}`}
+      // The inline script below may add data-resuming before React hydrates.
+      suppressHydrationWarning
+    >
+      <head>
+        {/* A round saved before a refresh: hide the page until it's restored,
+            so the roll picker doesn't flash first. Trivia clears the flag. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if(sessionStorage.getItem("snapshot-round"))document.documentElement.dataset.resuming=""}catch(e){}`,
+          }}
+        />
+      </head>
       <body>{children}</body>
     </html>
   );

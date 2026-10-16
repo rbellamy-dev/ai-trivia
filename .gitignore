@@ -31,3 +31,9 @@ design
 
 # design tooling notes (local only)
 .impeccable/
+
+# brainstorm mockups (local only)
+.superpowers/
+
+# image generation drafts (chosen ones are copied into src/assets)
+/generations/

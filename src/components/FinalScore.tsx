@@ -1,21 +1,23 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import TriviaButton from "./TriviaButton";
-import ScoreChip from "./ScoreChip";
-import { MiniCard } from "./CardPiles";
+import { Check, Cross } from "./Marks";
 import { useScoreHistory } from "@/hooks/useScoreHistory";
+import type { Question } from "@/data/types";
+import type { PrintImage } from "@/hooks/useRollImages";
 
-// The score names a poker hand. Five bands, so every result reads as a real
-// hand rather than one catch-all for everything under 70%.
-const HANDS: { min: number; name: string; talk: string }[] = [
-  { min: 100, name: "Royal Flush", talk: "Every trick taken. The table is yours." },
-  { min: 80, name: "Full House", talk: "A strong hand. The house is already folding." },
-  { min: 60, name: "Straight", talk: "More hits than misses. A solid run." },
-  { min: 40, name: "Two Pair", talk: "Half the table. Another deal and you're ahead." },
-  { min: 0, name: "High Card", talk: "A rough deal. Reshuffle and go again." },
+// The result names how the roll came out. Five bands, so every result reads
+// as a real verdict rather than one catch-all for everything under 70%.
+const BANDS: { min: number; name: string; talk: string }[] = [
+  { min: 100, name: "Gallery show", talk: "Every one a keeper. Hang the whole set." },
+  { min: 80, name: "Portfolio", talk: "Strong work. Most of these go on the wall." },
+  { min: 60, name: "Keepers", talk: "More right than wrong. A solid shoot." },
+  { min: 40, name: "Test strip", talk: "Half the prints came out. Another go and you're there." },
+  { min: 0, name: "Overexposed", talk: "A rough round. Load fresh film and go again." },
 ];
 
-const handFor = (pct: number) => HANDS.find((h) => pct >= h.min) ?? HANDS[HANDS.length - 1];
+const bandFor = (pct: number) => BANDS.find((b) => pct >= b.min) ?? BANDS[BANDS.length - 1];
 
 // useScoreHistory stores dates as M/D/YYYY; show them as "Sep 28".
 const shortDate = (mdy: string) => {
@@ -26,79 +28,146 @@ const shortDate = (mdy: string) => {
     : date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
 };
 
+/**
+ * One print on the contact sheet. It turns over (hover, focus or tap) to show
+ * its question and the answer, so the sheet stays a clean grid of photos but
+ * still lets you learn from the ones you missed.
+ */
+const SheetPrint = ({
+  question,
+  image,
+  choice,
+  index,
+}: {
+  question: Question;
+  image?: PrintImage;
+  choice: string;
+  index: number;
+}) => {
+  const [turned, setTurned] = useState(false);
+  const ok = question.answer.includes(choice);
+  const answer = question.answer[0];
+
+  return (
+    <li style={{ animationDelay: `${index * 0.05}s` }} className="animate-fade-in">
+      <button
+        type="button"
+        aria-pressed={turned}
+        aria-label={`Question ${index + 1}, ${ok ? "correct" : "incorrect"}. ${question.question} Answer: ${answer}.${
+          ok ? "" : ` You said ${choice || "nothing"}.`
+        }`}
+        onClick={() => setTurned((t) => !t)}
+        className="group block w-full cursor-pointer transition-transform duration-200 [perspective:900px] hover:-translate-y-0.5"
+      >
+        <span
+          className={`relative block aspect-[3/4] transition-transform duration-500 ease-out [transform-style:preserve-3d] motion-reduce:transition-none ${
+            turned ? "[transform:rotateY(180deg)]" : ""
+          }`}
+        >
+          {/* front: the print */}
+          <span className="absolute inset-0 bg-print p-1.5 shadow-thumb [backface-visibility:hidden]">
+            <span className="relative block size-full overflow-hidden bg-empty">
+              {image?.status === "ready" ? (
+                // eslint-disable-next-line @next/next/no-img-element -- a pre-sized 320px WebP thumbnail
+                <img src={question.photo?.thumb ?? image.url} alt="" loading="lazy" decoding="async" className="size-full object-cover" />
+              ) : (
+                <span className="grid size-full place-items-center p-2 text-center font-hand text-[0.875rem]">
+                  {question.caption}
+                </span>
+              )}
+              <span aria-hidden="true" className={`absolute inset-0 ${ok ? "bg-hit/25" : "bg-pencil-text/30"}`} />
+              {ok ? (
+                <Check still className="absolute top-[30%] left-[30%] size-[40%]" />
+              ) : (
+                <Cross still className="absolute top-[30%] left-[30%] size-[40%]" />
+              )}
+            </span>
+          </span>
+
+          {/* back: the question, as if written on the reverse of the print */}
+          <span
+            aria-hidden="true"
+            className="absolute inset-0 flex flex-col gap-2 overflow-hidden bg-print p-3 text-left shadow-thumb [backface-visibility:hidden] [transform:rotateY(180deg)]"
+          >
+            <span className="font-mono text-[0.75rem] text-muted">{String(index + 1).padStart(2, "0")}</span>
+            <span className="line-clamp-5 text-[0.8125rem] leading-snug text-ink">{question.question}</span>
+            <span className="mt-auto text-[0.8125rem] leading-snug font-medium text-hit">{answer}</span>
+            {!ok && (
+              <span className="text-[0.75rem] leading-snug text-pencil-text line-through decoration-1">
+                {choice}
+              </span>
+            )}
+          </span>
+        </span>
+      </button>
+    </li>
+  );
+};
+
+/** The end of the round: every print laid out as a contact sheet. */
 const FinalScore = ({
   onPlayAgain,
   onNewSubject,
   score,
   questions,
+  images,
+  choices,
   deck = "",
-  results = [],
 }: {
   onPlayAgain: () => void;
   onNewSubject: () => void;
   score: number;
-  questions: number;
-  /** The deck just played, named on the replay button. */
+  questions: Question[];
+  images: PrintImage[];
+  /** What the player picked for each question, in play order. */
+  choices: string[];
   deck?: string;
-  /** Per-question outcome, in play order. Falls back to score-first if missing. */
-  results?: (boolean | null)[];
 }) => {
-  const hand = handFor((score / questions) * 100);
-  const best = useScoreHistory(score, questions);
+  const total = questions.length;
+  const band = bandFor((score / total) * 100);
+  const best = useScoreHistory(score, total, deck || undefined);
 
-  const played: (boolean | null)[] =
-    results.length === questions
-      ? results
-      : Array.from({ length: questions }, (_, i) => i < score);
+  // The Next button that led here just unmounted; land focus on the verdict.
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  useEffect(() => headingRef.current?.focus({ preventScroll: true }), []);
 
   return (
-    <section
-      key={score}
-      className="flex flex-col items-center text-center animate-fade-in"
-    >
-      {/* The chip carries the score; the hand name is the headline. */}
-      <ScoreChip score={score} size="lg" label={`Chips won, out of ${questions}`} />
-
-      <h2 className="mt-5 font-display text-[44px] uppercase leading-none tracking-[0.04em] text-sun max-sm:text-[36px]">
-        {hand.name}
-      </h2>
-      <p className="mt-3 text-[11px] font-bold uppercase tracking-[0.14em] text-card/80">
-        {score} of {questions} tricks
-      </p>
-      <p className="mt-3 max-w-[42ch] text-card/80">{hand.talk}</p>
-
-      <ul
-        className="mt-7 flex flex-wrap justify-center gap-1"
-        aria-label={`Hands played: ${score} hits, ${questions - score} misses`}
+    <section className="mx-auto flex w-full max-w-[920px] flex-col items-center px-6 pb-10 text-center animate-fade-in max-sm:px-4">
+      <p className="text-[0.875rem] text-muted">Contact sheet{deck ? ` · ${deck}` : ""}</p>
+      <h2
+        ref={headingRef}
+        tabIndex={-1}
+        className="mt-2 text-[2.5rem] leading-none font-semibold tracking-[-0.02em] outline-none md:text-[3.25rem]"
       >
-        {played.map((ok, i) => (
-          <li key={i} style={{ animationDelay: `${i * 0.05}s` }} className="animate-deal">
-            <MiniCard ok={ok} size="md" />
-            <span className="sr-only">
-              Hand {i + 1}: {ok ? "hit" : "miss"}
-            </span>
-          </li>
-        ))}
-      </ul>
+        {band.name}
+      </h2>
+      <p className="mt-4 text-[1rem] text-muted">
+        <b className="font-semibold text-ink">{score}</b> of {total} correct
+      </p>
+      <p className="mt-1 max-w-[46ch] text-[1.0625rem] text-muted">{band.talk}</p>
 
-      <p className="mt-6 text-[11px] font-bold uppercase tracking-[0.12em] text-card/80">
-        Best hand{" "}
-        <span className="text-sun">
-          {best.score}/{best.questions}
-        </span>{" "}
-        · {shortDate(best.date)}
+      <ol
+        aria-label={`Your round: ${score} correct, ${total - score} incorrect`}
+        className="mt-8 grid w-full grid-cols-2 gap-2.5 bg-strip p-4 sm:grid-cols-3 sm:gap-3 md:grid-cols-5"
+      >
+        {questions.map((q, i) => (
+          <SheetPrint key={q.id} question={q} image={images[i]} choice={choices[i] ?? ""} index={i} />
+        ))}
+      </ol>
+      <p className="mt-3 text-[0.8125rem] text-muted">Tap or click a print to turn it over.</p>
+
+      <p className="mt-6 text-[0.875rem] text-muted">
+        Best score <span className="font-mono text-ink tabular-nums">{best.score}/{best.questions}</span>
+        <span aria-hidden="true"> · </span>
+        {shortDate(best.date)}
       </p>
 
-      <div className="mt-8 flex items-center justify-center gap-3 max-[460px]:flex-col max-[460px]:items-stretch">
+      <div className="mt-8 flex items-center justify-center gap-3 max-[460px]:w-full max-[460px]:flex-col max-[460px]:items-stretch">
         <TriviaButton
           handleButton={onPlayAgain}
-          buttonText={deck ? `Deal ${deck} again` : "Deal again"}
+          buttonText={deck ? `Play ${deck} again` : "Play again"}
         />
-        <TriviaButton
-          handleButton={onNewSubject}
-          buttonText="Pick another deck"
-          variant="quiet"
-        />
+        <TriviaButton handleButton={onNewSubject} buttonText="Choose another topic" variant="quiet" />
       </div>
     </section>
   );
