@@ -11,6 +11,9 @@ import type { Question } from "@/data/types";
 export const maxDuration = 60;
 
 const ROLL_SIZE = 10;
+
+const NEUTRAL_CAPTIONS = ["Field notes", "Late light", "From the archive", "Study", "Untitled", "Kept"];
+const neutralCaption = (i: number) => NEUTRAL_CAPTIONS[i % NEUTRAL_CAPTIONS.length];
 // The quality checks drop a question now and then, so ask for a couple of
 // spares and stop as soon as ROLL_SIZE good ones have been sent.
 const ASK_FOR = ROLL_SIZE + 2;
@@ -40,7 +43,7 @@ Rules:
 The photo:
 - The photo only sets the scene for the question's topic. It must NOT show or hint at the correct answer or any of the choices. Example: for "Which emperor opened the Colosseum?" a photo of stone columns is fine; for "Which bird can turn its head almost all the way round?" never the owl photo.
 - Before choosing, ask: "Could someone answer from this photo alone?" If yes, choose a more oblique one.
-- Captions are neutral, like a gallery or archive label ("Case 07", "c. 1860", "Field notes"). A caption never names or hints at a country, city, culture, person or anything in the choices. Bad: "Famous French Landmark". Good: "Frame 3".
+- Captions are 1–3 neutral words, like a note on the back of a print ("Field notes", "Late light", "From the archive", "Study"). Never use numbers or dates in a caption. A caption never names or hints at a country, city, culture, person or anything in the choices. Bad: "Famous French Landmark". Good: "Late light".
 
 The photo library ("imageQuery" must be one of these names, copied exactly; what each photo shows is after the colon):
 ${shuffled(scenes).map((s) => `- ${s.name}: ${s.description}`).join("\n")}
@@ -111,12 +114,16 @@ export async function POST(request: Request) {
         const scene = pickScene(q.imageQuery, q.answer[0], scenes, usedScenes);
         if (scene) usedScenes.add(scene.name);
 
+        // Captions with numbers clash with the print's frame number (a "Frame
+        // 3" on 04A) and can hint at year answers, so they get a neutral one.
+        const caption = /\d/.test(q.caption) || !q.caption.trim() ? neutralCaption(sent) : q.caption.trim();
+
         const question: Question = {
           id: `question-${sent}`,
           question: q.question,
           choices: q.choices,
           answer: q.answer,
-          caption: q.caption,
+          caption,
           imageAlt: scene?.description ?? "",
           photo: scene ? { url: scene.src, thumb: scene.thumb, alt: scene.description } : null,
         };
